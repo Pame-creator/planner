@@ -1857,6 +1857,11 @@
       padding: 8px 6px;
     }
 
+    /* Si es un grupo de 3 opciones (pasajes/hospedaje), la última ocupa toda la fila */
+    .trip-status-options:has(> .trip-status-option:nth-child(3):last-child) > .trip-status-option:nth-child(3) {
+      flex: 1 1 100%;
+    }
+
     .luggage-list {
       max-height: 220px;
     }
@@ -3087,7 +3092,7 @@
 
     body.appendChild(makeField('Destino', 'text', trip.destination, (v) => {
       trip.destination = v;
-    }, '¿A dónde viajas? (ej: Buenos Aires, Argentina)'));
+    }, 'Destino (ej: Buenos Aires)'));
 
     // Fechas
     const datesRow = document.createElement('div');
