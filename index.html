@@ -1,0 +1,3630 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+<meta name="theme-color" content="#BA68C8">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Mi Planner">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="icon-512.png">
+<title>Mi Planner</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Nunito:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* PALETAS DE COLORES */
+  :root[data-palette="rosa-lila-verde"] {
+    --c1-suave: #FCE4EC;
+    --c1-medio: #F8BBD0;
+    --c1-fuerte: #F48FB1;
+    --c1-acento: #EC407A;
+    --c2-suave: #E1BEE7;
+    --c2-medio: #CE93D8;
+    --c2-fuerte: #BA68C8;
+    --c2-acento: #8E24AA;
+    --c3-suave: #C8E6C9;
+    --c3-medio: #A5D6A7;
+    --c3-fuerte: #81C784;
+    --c3-acento: #43A047;
+    --crema: #FFF8F0;
+    --crema-oscuro: #FAF0E6;
+    --texto: #4A3548;
+    --texto-suave: #7C6478;
+  }
+
+  :root[data-palette="lavanda-celeste"] {
+    --c1-suave: #E3F2FD;
+    --c1-medio: #BBDEFB;
+    --c1-fuerte: #90CAF9;
+    --c1-acento: #1E88E5;
+    --c2-suave: #D1C4E9;
+    --c2-medio: #B39DDB;
+    --c2-fuerte: #9575CD;
+    --c2-acento: #5E35B1;
+    --c3-suave: #B2EBF2;
+    --c3-medio: #80DEEA;
+    --c3-fuerte: #4DD0E1;
+    --c3-acento: #00ACC1;
+    --crema: #F5F5FF;
+    --crema-oscuro: #ECEDF7;
+    --texto: #2A2A4A;
+    --texto-suave: #5A5A7A;
+  }
+
+  :root[data-palette="verde-tierra"] {
+    --c1-suave: #DCEDC8;
+    --c1-medio: #C5E1A5;
+    --c1-fuerte: #AED581;
+    --c1-acento: #689F38;
+    --c2-suave: #D7CCC8;
+    --c2-medio: #BCAAA4;
+    --c2-fuerte: #A1887F;
+    --c2-acento: #6D4C41;
+    --c3-suave: #FFF9C4;
+    --c3-medio: #FFF59D;
+    --c3-fuerte: #FFF176;
+    --c3-acento: #FBC02D;
+    --crema: #FAF8F1;
+    --crema-oscuro: #F0EDE0;
+    --texto: #3E342E;
+    --texto-suave: #6E5F55;
+  }
+
+  :root[data-palette="durazno-coral"] {
+    --c1-suave: #FFE0B2;
+    --c1-medio: #FFCC80;
+    --c1-fuerte: #FFB74D;
+    --c1-acento: #FB8C00;
+    --c2-suave: #FFCDD2;
+    --c2-medio: #EF9A9A;
+    --c2-fuerte: #E57373;
+    --c2-acento: #E53935;
+    --c3-suave: #FFF59D;
+    --c3-medio: #FFF176;
+    --c3-fuerte: #FFEE58;
+    --c3-acento: #FDD835;
+    --crema: #FFF8F0;
+    --crema-oscuro: #FFEFE0;
+    --texto: #4E342E;
+    --texto-suave: #8D6E63;
+  }
+
+  :root {
+    --sombra: 0 4px 20px rgba(0, 0, 0, 0.08);
+    --sombra-fuerte: 0 8px 30px rgba(0, 0, 0, 0.15);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: linear-gradient(135deg, var(--crema) 0%, var(--c1-suave) 100%);
+    color: var(--texto);
+    min-height: 100vh;
+    padding: 20px;
+    transition: background 0.4s ease;
+  }
+
+  .container {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  /* HEADER */
+  header {
+    background: white;
+    border-radius: 24px;
+    padding: 24px 32px;
+    margin-bottom: 24px;
+    box-shadow: var(--sombra);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  h1 {
+    font-family: 'Fraunces', serif;
+    font-weight: 400;
+    font-size: 32px;
+    color: var(--c2-acento);
+    font-style: italic;
+  }
+
+  h1 span {
+    color: var(--c1-acento);
+    font-weight: 500;
+  }
+
+  .header-subtitle {
+    font-size: 13px;
+    color: var(--texto-suave);
+    margin-top: 4px;
+    font-style: italic;
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .tabs {
+    display: flex;
+    gap: 8px;
+    background: var(--crema-oscuro);
+    padding: 6px;
+    border-radius: 16px;
+  }
+
+  .tab {
+    padding: 10px 20px;
+    border: none;
+    background: transparent;
+    color: var(--texto-suave);
+    font-family: 'Nunito', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .tab.active {
+    background: white;
+    color: var(--c2-acento);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .tab:hover:not(.active) {
+    color: var(--texto);
+  }
+
+  .config-btn {
+    background: var(--c2-suave);
+    border: none;
+    width: 44px;
+    height: 44px;
+    border-radius: 14px;
+    cursor: pointer;
+    font-size: 20px;
+    color: var(--c2-acento);
+    transition: all 0.2s ease;
+  }
+
+  .config-btn:hover {
+    background: var(--c2-medio);
+    transform: rotate(45deg);
+  }
+
+  /* NAV CONTROLS */
+  .nav-controls {
+    background: white;
+    border-radius: 20px;
+    padding: 16px 24px;
+    margin-bottom: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: var(--sombra);
+  }
+
+  .nav-controls button {
+    background: var(--c1-suave);
+    border: none;
+    color: var(--c2-acento);
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-weight: bold;
+  }
+
+  .nav-controls button:hover {
+    background: var(--c1-medio);
+    transform: scale(1.05);
+  }
+
+  .nav-controls .current-period {
+    font-family: 'Fraunces', serif;
+    font-size: 22px;
+    font-weight: 500;
+    color: var(--c2-acento);
+    text-transform: capitalize;
+  }
+
+  /* VISTAS */
+  .view {
+    display: none;
+  }
+
+  .view.active {
+    display: block;
+  }
+
+  /* MES */
+  .month-grid {
+    background: white;
+    border-radius: 24px;
+    padding: 24px;
+    box-shadow: var(--sombra);
+  }
+
+  .weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .weekday {
+    text-align: center;
+    font-weight: 700;
+    color: var(--c2-acento);
+    font-size: 13px;
+    padding: 8px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  .days {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 8px;
+  }
+
+  .day-cell {
+    aspect-ratio: 1;
+    background: var(--crema-oscuro);
+    border-radius: 16px;
+    padding: 8px;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .day-cell:hover {
+    background: var(--c1-suave);
+    transform: translateY(-2px);
+    box-shadow: var(--sombra);
+  }
+
+  .day-cell.other-month {
+    opacity: 0.3;
+  }
+
+  .day-cell.today {
+    background: var(--c2-suave);
+    border: 2px solid var(--c2-fuerte);
+  }
+
+  .day-cell.has-data {
+    background: linear-gradient(135deg, var(--c1-suave), var(--c2-suave));
+  }
+
+  .day-cell.menstruation {
+    background: linear-gradient(135deg, #FFCDD2, #F8BBD0);
+    border: 2px solid #EF5350;
+  }
+
+  .day-cell.predicted-menstruation {
+    background: repeating-linear-gradient(
+      45deg,
+      var(--c1-suave),
+      var(--c1-suave) 6px,
+      #FFCDD2 6px,
+      #FFCDD2 12px
+    );
+    border: 2px dashed #EF5350;
+  }
+
+  .day-number {
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--texto);
+  }
+
+  .day-indicators {
+    display: flex;
+    gap: 3px;
+    margin-top: auto;
+    flex-wrap: wrap;
+  }
+
+  .indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+  }
+
+  .indicator.exercise { background: var(--c3-fuerte); }
+  .indicator.water { background: #4FC3F7; }
+  .indicator.note { background: var(--c2-fuerte); }
+  .indicator.menstruation { background: #EF5350; }
+
+  /* SEMANA */
+  .week-grid {
+    background: white;
+    border-radius: 24px;
+    padding: 24px;
+    box-shadow: var(--sombra);
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 12px;
+  }
+
+  .week-day {
+    background: var(--crema-oscuro);
+    border-radius: 16px;
+    padding: 16px;
+    min-height: 280px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .week-day:hover {
+    background: var(--c1-suave);
+    transform: translateY(-2px);
+  }
+
+  .week-day.today {
+    background: var(--c2-suave);
+    border: 2px solid var(--c2-fuerte);
+  }
+
+  .week-day-header {
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px dashed var(--c2-medio);
+  }
+
+  .week-day-name {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--c2-acento);
+    font-weight: 700;
+  }
+
+  .week-day-number {
+    font-family: 'Fraunces', serif;
+    font-size: 24px;
+    color: var(--texto);
+    font-weight: 500;
+  }
+
+  .week-day-content {
+    font-size: 12px;
+    color: var(--texto-suave);
+    line-height: 1.5;
+    flex-grow: 1;
+    overflow: hidden;
+  }
+
+  .week-day-mini-checks {
+    display: flex;
+    gap: 6px;
+    margin-top: 8px;
+    flex-wrap: wrap;
+  }
+
+  .mini-check {
+    background: white;
+    padding: 2px 8px;
+    border-radius: 8px;
+    font-size: 10px;
+    color: var(--texto-suave);
+  }
+
+  .mini-check.active {
+    background: var(--c3-suave);
+    color: var(--c3-acento);
+    font-weight: 600;
+  }
+
+  /* MODAL */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(8px);
+    z-index: 100;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+  }
+
+  .modal-overlay.active {
+    display: flex;
+  }
+
+  .modal {
+    background: white;
+    border-radius: 28px;
+    padding: 32px;
+    max-width: 600px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: var(--sombra-fuerte);
+  }
+
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px dashed var(--c2-medio);
+  }
+
+  .modal-title {
+    font-family: 'Fraunces', serif;
+    font-size: 26px;
+    color: var(--c2-acento);
+    font-weight: 500;
+  }
+
+  .modal-title span {
+    color: var(--texto-suave);
+    font-size: 16px;
+    font-style: italic;
+    margin-left: 8px;
+    display: block;
+    margin-top: 4px;
+  }
+
+  .close-btn {
+    background: var(--c1-suave);
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 18px;
+    color: var(--c1-acento);
+    font-weight: bold;
+    flex-shrink: 0;
+  }
+
+  .close-btn:hover {
+    background: var(--c1-medio);
+  }
+
+  .modal-section {
+    margin-bottom: 24px;
+  }
+
+  .section-title {
+    font-family: 'Fraunces', serif;
+    font-size: 16px;
+    color: var(--c2-acento);
+    margin-bottom: 12px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .section-title::before {
+    content: '';
+    width: 12px;
+    height: 12px;
+    background: var(--c1-fuerte);
+    border-radius: 50%;
+  }
+
+  textarea {
+    width: 100%;
+    min-height: 100px;
+    border: 2px solid var(--c1-suave);
+    border-radius: 16px;
+    padding: 12px 16px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 14px;
+    color: var(--texto);
+    resize: vertical;
+    transition: border 0.2s ease;
+    background: var(--crema);
+  }
+
+  textarea:focus {
+    outline: none;
+    border-color: var(--c2-medio);
+  }
+
+  input[type="text"] {
+    width: 100%;
+    border: 2px solid var(--c1-suave);
+    border-radius: 12px;
+    padding: 10px 14px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 14px;
+    color: var(--texto);
+    background: var(--crema);
+    transition: border 0.2s ease;
+  }
+
+  input[type="text"]:focus {
+    outline: none;
+    border-color: var(--c2-medio);
+  }
+
+  /* CHECKBOXES */
+  .checkbox-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    background: var(--crema);
+    border-radius: 12px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .checkbox-row:hover {
+    background: var(--c1-suave);
+  }
+
+  .checkbox-row.checked {
+    background: var(--c3-suave);
+  }
+
+  .custom-checkbox {
+    width: 22px;
+    height: 22px;
+    border-radius: 8px;
+    border: 2px solid var(--c2-medio);
+    background: white;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+  }
+
+  .custom-checkbox.checked {
+    background: var(--c3-fuerte);
+    border-color: var(--c3-acento);
+  }
+
+  .custom-checkbox.checked::after {
+    content: '✓';
+    color: white;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-weight: bold;
+    font-size: 14px;
+  }
+
+  /* AGUA */
+  .water-grid {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 8px;
+    margin-top: 8px;
+  }
+
+  .water-glass {
+    aspect-ratio: 1;
+    background: var(--crema);
+    border: 2px solid var(--c1-medio);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+  }
+
+  .water-glass.filled {
+    background: linear-gradient(180deg, #B3E5FC, #4FC3F7);
+    border-color: #29B6F6;
+    color: white;
+    transform: scale(1.05);
+  }
+
+  /* EJERCICIO */
+  .exercise-section {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .exercise-types {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+  }
+
+  .exercise-tag {
+    background: var(--crema);
+    border: 1.5px solid var(--c2-medio);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: var(--texto);
+  }
+
+  .exercise-tag.selected {
+    background: var(--c3-fuerte);
+    border-color: var(--c3-acento);
+    color: white;
+    font-weight: 600;
+  }
+
+  .exercise-extra {
+    width: 100%;
+    border: 2px solid var(--c1-suave);
+    border-radius: 12px;
+    padding: 10px 14px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 13px;
+    margin-top: 8px;
+    background: var(--crema);
+  }
+
+  .exercise-extra:focus {
+    outline: none;
+    border-color: var(--c2-medio);
+  }
+
+  /* TRACKERS CUSTOM */
+  .delete-tracker {
+    background: var(--c1-suave);
+    border: none;
+    color: var(--c1-acento);
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+
+  /* TAREAS DEL DÍA */
+  .task-input-row {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+
+  .task-input {
+    flex: 1;
+    border: 2px solid var(--c1-suave);
+    border-radius: 12px;
+    padding: 10px 14px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 14px;
+    background: var(--crema);
+    color: var(--texto);
+  }
+
+  .task-input:focus {
+    outline: none;
+    border-color: var(--c2-medio);
+  }
+
+  .add-task-btn {
+    background: var(--c2-fuerte);
+    border: none;
+    color: white;
+    padding: 0 16px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 18px;
+    transition: all 0.2s ease;
+  }
+
+  .add-task-btn:hover {
+    background: var(--c2-acento);
+    transform: scale(1.05);
+  }
+
+  .task-list {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .task-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    background: var(--crema);
+    border-radius: 12px;
+    cursor: move;
+    transition: all 0.2s ease;
+    border: 2px solid transparent;
+  }
+
+  .task-item:hover {
+    background: var(--c1-suave);
+  }
+
+  .task-item.checked {
+    background: var(--c3-suave);
+    opacity: 0.7;
+  }
+
+  .task-item.checked .task-text {
+    text-decoration: line-through;
+    color: var(--texto-suave);
+  }
+
+  .task-item.dragging {
+    opacity: 0.4;
+    border-color: var(--c2-fuerte);
+  }
+
+  .task-item.drag-over {
+    border-color: var(--c2-acento);
+    background: var(--c2-suave);
+  }
+
+  .task-handle {
+    color: var(--texto-suave);
+    cursor: grab;
+    font-size: 16px;
+    user-select: none;
+    flex-shrink: 0;
+  }
+
+  .task-handle:active {
+    cursor: grabbing;
+  }
+
+  .task-move-controls {
+    display: none;
+    flex-direction: column;
+    gap: 2px;
+    flex-shrink: 0;
+  }
+
+  .task-move-btn {
+    background: var(--c2-suave);
+    border: none;
+    color: var(--c2-acento);
+    width: 28px;
+    height: 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 10px;
+    padding: 0;
+    transition: all 0.2s ease;
+  }
+
+  .task-move-btn:hover:not(:disabled) {
+    background: var(--c2-medio);
+    color: white;
+  }
+
+  .task-move-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+  }
+
+  .task-text {
+    flex-grow: 1;
+    font-size: 14px;
+    color: var(--texto);
+    word-break: break-word;
+  }
+
+  .task-delete {
+    background: transparent;
+    border: none;
+    color: var(--c1-acento);
+    cursor: pointer;
+    font-size: 16px;
+    padding: 4px 8px;
+    border-radius: 6px;
+    flex-shrink: 0;
+  }
+
+  .task-delete:hover {
+    background: var(--c1-suave);
+  }
+
+  .task-info {
+    background: var(--crema-oscuro);
+    padding: 8px 12px;
+    border-radius: 10px;
+    font-size: 11px;
+    color: var(--texto-suave);
+    margin-bottom: 10px;
+    font-style: italic;
+  }
+
+  .task-info-pending {
+    background: linear-gradient(135deg, var(--c2-suave), var(--c1-suave));
+    color: var(--c2-acento);
+    font-weight: 600;
+    font-style: normal;
+  }
+
+  /* VIAJES */
+  #upcomingTripBanner {
+    background: linear-gradient(135deg, var(--c2-fuerte), var(--c1-fuerte));
+    color: white;
+    padding: 14px 24px;
+    border-radius: 20px;
+    margin-bottom: 24px;
+    box-shadow: var(--sombra);
+    text-align: center;
+    font-weight: 600;
+    font-size: 15px;
+  }
+
+  #upcomingTripBanner .trip-emoji {
+    font-size: 20px;
+    margin-right: 8px;
+  }
+
+  .day-cell.is-trip {
+    background: linear-gradient(135deg, #B3E5FC, var(--c2-suave)) !important;
+    border: 2px solid var(--c2-fuerte) !important;
+  }
+
+  .day-cell.is-trip-start {
+    border-left: 4px solid var(--c2-acento) !important;
+  }
+
+  .day-cell.is-trip-end {
+    border-right: 4px solid var(--c2-acento) !important;
+  }
+
+  .trip-icon {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    font-size: 12px;
+  }
+
+  /* MODAL DE VIAJES */
+  .trips-modal {
+    background: white;
+    border-radius: 28px;
+    padding: 32px;
+    max-width: 700px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: var(--sombra-fuerte);
+  }
+
+  .trip-card {
+    background: var(--crema);
+    border: 2px solid var(--c1-suave);
+    border-radius: 18px;
+    padding: 20px;
+    margin-bottom: 16px;
+    transition: all 0.2s ease;
+  }
+
+  .trip-card:hover {
+    border-color: var(--c2-medio);
+  }
+
+  .trip-card.expanded {
+    border-color: var(--c2-fuerte);
+    background: white;
+  }
+
+  .trip-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    cursor: pointer;
+  }
+
+  .trip-card-title {
+    font-family: 'Fraunces', serif;
+    font-size: 20px;
+    color: var(--c2-acento);
+    font-weight: 500;
+    margin-bottom: 4px;
+  }
+
+  .trip-card-dates {
+    font-size: 13px;
+    color: var(--texto-suave);
+  }
+
+  .trip-card-countdown {
+    background: var(--c1-suave);
+    color: var(--c1-acento);
+    padding: 4px 10px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+    align-self: flex-start;
+  }
+
+  .trip-card-countdown.past {
+    background: var(--crema-oscuro);
+    color: var(--texto-suave);
+  }
+
+  .trip-card-countdown.now {
+    background: var(--c3-fuerte);
+    color: white;
+  }
+
+  .trip-card-body {
+    display: none;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px dashed var(--c2-medio);
+  }
+
+  .trip-card.expanded .trip-card-body {
+    display: block;
+  }
+
+  .trip-field-row {
+    margin-bottom: 14px;
+  }
+
+  .trip-field-label {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--c2-acento);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 6px;
+  }
+
+  .trip-field-row input,
+  .trip-field-row select,
+  .trip-field-row textarea {
+    width: 100%;
+    border: 2px solid var(--c1-suave);
+    border-radius: 10px;
+    padding: 8px 12px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 13px;
+    background: var(--crema);
+    color: var(--texto);
+  }
+
+  .trip-field-row input:focus,
+  .trip-field-row select:focus,
+  .trip-field-row textarea:focus {
+    outline: none;
+    border-color: var(--c2-medio);
+  }
+
+  .trip-dates-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .trip-status-options {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+
+  .trip-status-option {
+    flex: 1;
+    min-width: 100px;
+    background: var(--crema);
+    border: 1.5px solid var(--c1-suave);
+    padding: 8px 10px;
+    border-radius: 10px;
+    font-size: 12px;
+    cursor: pointer;
+    text-align: center;
+    transition: all 0.2s ease;
+    color: var(--texto);
+  }
+
+  .trip-status-option.selected {
+    background: var(--c3-fuerte);
+    border-color: var(--c3-acento);
+    color: white;
+    font-weight: 600;
+  }
+
+  .luggage-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    max-height: 280px;
+    overflow-y: auto;
+    padding-right: 4px;
+  }
+
+  .luggage-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 10px;
+    background: var(--crema);
+    border-radius: 8px;
+    transition: all 0.2s ease;
+  }
+
+  .luggage-item.checked {
+    background: var(--c3-suave);
+  }
+
+  .luggage-item.checked .luggage-text {
+    text-decoration: line-through;
+    color: var(--texto-suave);
+  }
+
+  .luggage-item input[type="text"] {
+    flex-grow: 1;
+    border: none;
+    background: transparent;
+    padding: 4px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 13px;
+    color: var(--texto);
+  }
+
+  .luggage-item input[type="text"]:focus {
+    outline: none;
+    background: white;
+    border-radius: 4px;
+  }
+
+  .luggage-text {
+    flex-grow: 1;
+    font-size: 13px;
+    color: var(--texto);
+  }
+
+  .luggage-delete {
+    background: transparent;
+    border: none;
+    color: var(--c1-acento);
+    cursor: pointer;
+    font-size: 14px;
+    padding: 2px 6px;
+    border-radius: 4px;
+  }
+
+  .luggage-delete:hover {
+    background: var(--c1-suave);
+  }
+
+  .luggage-add-row {
+    display: flex;
+    gap: 6px;
+    margin-top: 8px;
+  }
+
+  .luggage-add-row input {
+    flex: 1;
+    border: 2px solid var(--c1-suave);
+    border-radius: 8px;
+    padding: 6px 10px;
+    font-family: 'Nunito', sans-serif;
+    font-size: 13px;
+    background: var(--crema);
+  }
+
+  .luggage-add-btn {
+    background: var(--c2-fuerte);
+    border: none;
+    color: white;
+    padding: 0 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 700;
+  }
+
+  .trip-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px dashed var(--c2-medio);
+  }
+
+  .trip-delete-btn {
+    background: var(--c1-suave);
+    border: none;
+    color: var(--c1-acento);
+    padding: 8px 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 600;
+    font-size: 13px;
+  }
+
+  .trip-delete-btn:hover {
+    background: var(--c1-medio);
+    color: white;
+  }
+
+  .new-trip-btn {
+    background: linear-gradient(135deg, var(--c2-fuerte), var(--c1-fuerte));
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: 16px;
+    width: 100%;
+    cursor: pointer;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    margin-bottom: 20px;
+    transition: all 0.2s ease;
+  }
+
+  .new-trip-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+  }
+
+  .no-trips {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--texto-suave);
+    font-style: italic;
+  }
+
+  .add-tracker-btn {
+    background: var(--c2-suave);
+    border: 2px dashed var(--c2-medio);
+    color: var(--c2-acento);
+    padding: 10px;
+    border-radius: 12px;
+    width: 100%;
+    cursor: pointer;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 600;
+    margin-top: 8px;
+    transition: all 0.2s ease;
+  }
+
+  .add-tracker-btn:hover {
+    background: var(--c2-medio);
+    color: white;
+  }
+
+  /* MENSTRUACIÓN */
+  .menstruation-toggle {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px;
+    background: linear-gradient(135deg, #FFCDD2, #F8BBD0);
+    border-radius: 16px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .menstruation-toggle.active {
+    background: linear-gradient(135deg, #EF5350, #EC407A);
+    color: white;
+    font-weight: 600;
+  }
+
+  .menstruation-info {
+    background: var(--crema);
+    padding: 12px 16px;
+    border-radius: 12px;
+    margin-top: 12px;
+    font-size: 13px;
+    color: var(--texto-suave);
+    line-height: 1.6;
+  }
+
+  .menstruation-info strong {
+    color: var(--c1-acento);
+  }
+
+  /* SAVE */
+  .save-btn {
+    width: 100%;
+    background: linear-gradient(135deg, var(--c2-fuerte), var(--c1-fuerte));
+    color: white;
+    border: none;
+    padding: 14px;
+    border-radius: 16px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    font-size: 15px;
+    cursor: pointer;
+    margin-top: 16px;
+    transition: all 0.2s ease;
+    letter-spacing: 0.5px;
+  }
+
+  .save-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+  }
+
+  /* LEYENDA */
+  .legend {
+    background: white;
+    border-radius: 20px;
+    padding: 16px 24px;
+    margin-top: 16px;
+    display: flex;
+    gap: 24px;
+    flex-wrap: wrap;
+    box-shadow: var(--sombra);
+    font-size: 12px;
+    color: var(--texto-suave);
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .legend-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+  }
+
+  /* FOOTER */
+  footer {
+    text-align: center;
+    padding: 20px;
+    color: var(--texto-suave);
+    font-size: 12px;
+    font-style: italic;
+    margin-top: 16px;
+  }
+
+  footer span {
+    color: var(--c2-acento);
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+  }
+
+  /* BIENVENIDA */
+  .welcome-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, var(--c1-suave), var(--c2-suave));
+    z-index: 200;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+  }
+
+  .welcome-overlay.active {
+    display: flex;
+  }
+
+  .welcome-card {
+    background: white;
+    border-radius: 28px;
+    padding: 40px;
+    max-width: 500px;
+    width: 100%;
+    box-shadow: var(--sombra-fuerte);
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  .welcome-card h2 {
+    font-family: 'Fraunces', serif;
+    font-size: 32px;
+    color: var(--c2-acento);
+    margin-bottom: 8px;
+    font-weight: 500;
+    font-style: italic;
+  }
+
+  .welcome-card .welcome-sub {
+    color: var(--texto-suave);
+    margin-bottom: 28px;
+    font-size: 14px;
+  }
+
+  .welcome-step {
+    margin-bottom: 24px;
+  }
+
+  .welcome-step label {
+    display: block;
+    font-weight: 600;
+    color: var(--c2-acento);
+    margin-bottom: 10px;
+    font-size: 14px;
+  }
+
+  .gender-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .gender-option {
+    background: var(--crema);
+    border: 2px solid var(--c1-suave);
+    padding: 12px;
+    border-radius: 12px;
+    cursor: pointer;
+    text-align: center;
+    font-size: 13px;
+    transition: all 0.2s ease;
+    color: var(--texto);
+  }
+
+  .gender-option:hover {
+    background: var(--c1-suave);
+  }
+
+  .gender-option.selected {
+    background: var(--c2-suave);
+    border-color: var(--c2-fuerte);
+    color: var(--c2-acento);
+    font-weight: 600;
+  }
+
+  .toggle-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--crema);
+    padding: 14px 16px;
+    border-radius: 12px;
+  }
+
+  .toggle-switch {
+    width: 48px;
+    height: 26px;
+    background: var(--c1-suave);
+    border-radius: 14px;
+    position: relative;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+
+  .toggle-switch.on {
+    background: var(--c3-fuerte);
+  }
+
+  .toggle-switch::after {
+    content: '';
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    width: 20px;
+    height: 20px;
+    background: white;
+    border-radius: 50%;
+    transition: left 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+
+  .toggle-switch.on::after {
+    left: 25px;
+  }
+
+  .palette-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .palette-option {
+    background: var(--crema);
+    border: 2px solid var(--c1-suave);
+    padding: 12px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+    font-size: 12px;
+    color: var(--texto);
+  }
+
+  .palette-option.selected {
+    border-color: var(--c2-fuerte);
+    background: var(--c2-suave);
+    color: var(--c2-acento);
+    font-weight: 600;
+  }
+
+  .palette-preview {
+    display: flex;
+    gap: 4px;
+    justify-content: center;
+    margin-bottom: 6px;
+  }
+
+  .palette-dot {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 2px solid white;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  }
+
+  /* RESPONSIVE */
+  /* === RESPONSIVE === */
+
+  /* TABLET */
+  @media (max-width: 1024px) {
+    body { padding: 12px; }
+    .container { max-width: 100%; }
+    header { padding: 18px 22px; }
+    h1 { font-size: 28px; }
+  }
+
+  /* CELULAR */
+  @media (max-width: 640px) {
+    body {
+      padding: 10px;
+    }
+
+    /* Header compacto */
+    header {
+      padding: 14px 16px;
+      border-radius: 18px;
+      gap: 10px;
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    header > div:first-child {
+      flex-grow: 1;
+      min-width: 0;
+      text-align: center;
+    }
+
+    h1 { font-size: 22px; }
+    .header-subtitle { font-size: 11px; }
+
+    .header-right {
+      gap: 6px;
+      width: 100%;
+      display: flex;
+      align-items: center;
+    }
+
+    .tabs {
+      padding: 4px;
+      flex-grow: 1;
+      display: flex;
+    }
+
+    .tab {
+      padding: 8px 12px;
+      font-size: 13px;
+      flex: 1;
+    }
+
+    .config-btn {
+      width: 38px;
+      height: 38px;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    /* Banner viaje */
+    #upcomingTripBanner {
+      padding: 10px 16px;
+      font-size: 13px;
+      border-radius: 14px;
+      margin-bottom: 12px;
+    }
+
+    #upcomingTripBanner .trip-emoji {
+      font-size: 16px;
+    }
+
+    /* Nav controls */
+    .nav-controls {
+      padding: 12px 14px;
+      border-radius: 14px;
+      margin-bottom: 12px;
+    }
+
+    .nav-controls button {
+      width: 36px;
+      height: 36px;
+      font-size: 16px;
+    }
+
+    .nav-controls .current-period {
+      font-size: 16px;
+    }
+
+    /* CALENDARIO MENSUAL */
+    .month-grid {
+      padding: 12px;
+      border-radius: 16px;
+    }
+
+    .weekdays {
+      gap: 4px;
+      margin-bottom: 8px;
+    }
+
+    .weekday {
+      font-size: 10px;
+      padding: 4px 2px;
+      letter-spacing: 0.5px;
+    }
+
+    .days {
+      gap: 4px;
+    }
+
+    .day-cell {
+      padding: 4px;
+      border-radius: 10px;
+      min-height: 50px;
+    }
+
+    .day-number {
+      font-size: 13px;
+    }
+
+    .day-indicators {
+      gap: 2px;
+    }
+
+    .indicator {
+      width: 5px;
+      height: 5px;
+    }
+
+    .trip-icon {
+      font-size: 10px;
+      top: 2px;
+      right: 2px;
+    }
+
+    /* VISTA SEMANAL */
+    .week-grid {
+      grid-template-columns: 1fr;
+      padding: 14px;
+      gap: 8px;
+      border-radius: 16px;
+    }
+
+    .week-day {
+      min-height: auto;
+      padding: 12px;
+      flex-direction: row;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .week-day-header {
+      margin-bottom: 0;
+      padding-bottom: 0;
+      border-bottom: none;
+      border-right: 1px dashed var(--c2-medio);
+      padding-right: 12px;
+      min-width: 60px;
+      text-align: center;
+    }
+
+    .week-day-number {
+      font-size: 20px;
+    }
+
+    .week-day-content {
+      flex-grow: 1;
+      font-size: 12px;
+    }
+
+    /* Leyenda */
+    .legend {
+      padding: 12px 16px;
+      gap: 10px;
+      font-size: 10px;
+      border-radius: 14px;
+    }
+
+    .legend-dot {
+      width: 10px;
+      height: 10px;
+    }
+
+    /* MODALES en celular = pantalla casi completa */
+    .modal-overlay {
+      padding: 0;
+      align-items: flex-end;
+    }
+
+    .modal, .trips-modal {
+      max-width: 100%;
+      width: 100%;
+      max-height: 95vh;
+      border-radius: 24px 24px 0 0;
+      padding: 20px;
+      padding-bottom: 30px;
+      animation: slideUp 0.3s ease;
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(100%); }
+      to { transform: translateY(0); }
+    }
+
+    .modal-header {
+      padding-bottom: 12px;
+      margin-bottom: 18px;
+    }
+
+    .modal-title {
+      font-size: 20px;
+    }
+
+    .modal-title span {
+      font-size: 13px;
+    }
+
+    .section-title {
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+
+    .modal-section {
+      margin-bottom: 18px;
+    }
+
+    /* Diario */
+    textarea {
+      font-size: 16px; /* Evita zoom auto en iOS */
+      padding: 10px 12px;
+      border-radius: 12px;
+      min-height: 80px;
+    }
+
+    /* Inputs en general en celular: 16px para evitar zoom iOS */
+    input[type="text"], input[type="date"], select {
+      font-size: 16px !important;
+    }
+
+    /* Tareas */
+    .task-input {
+      font-size: 14px;
+      padding: 9px 12px;
+    }
+
+    .add-task-btn {
+      padding: 0 14px;
+      font-size: 20px;
+    }
+
+    .task-item {
+      padding: 12px 10px;
+      gap: 8px;
+    }
+
+    .task-handle {
+      font-size: 18px;
+    }
+
+    .task-text {
+      font-size: 14px;
+    }
+
+    .task-delete {
+      font-size: 18px;
+      padding: 6px 10px;
+    }
+
+    /* Agua: 4x2 en lugar de 8x1 */
+    .water-grid {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+    }
+
+    .water-glass {
+      font-size: 18px;
+      border-radius: 10px;
+    }
+
+    /* Ejercicio */
+    .exercise-tag {
+      padding: 8px 14px;
+      font-size: 13px;
+    }
+
+    .checkbox-row {
+      padding: 12px 14px;
+    }
+
+    .custom-checkbox {
+      width: 24px;
+      height: 24px;
+    }
+
+    /* Save button */
+    .save-btn {
+      padding: 16px;
+      font-size: 15px;
+      border-radius: 14px;
+      position: sticky;
+      bottom: 0;
+      background-clip: padding-box;
+      box-shadow: 0 -4px 20px rgba(255,255,255,0.5);
+    }
+
+    /* WELCOME */
+    .welcome-card {
+      padding: 24px 20px;
+      border-radius: 24px;
+      max-height: 95vh;
+    }
+
+    .welcome-card h2 {
+      font-size: 26px;
+    }
+
+    .gender-options, .palette-options {
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+    }
+
+    .gender-option, .palette-option {
+      padding: 10px 8px;
+      font-size: 12px;
+    }
+
+    .palette-dot {
+      width: 14px;
+      height: 14px;
+    }
+
+    /* CONFIG MODAL */
+    .toggle-row {
+      padding: 12px 14px;
+    }
+
+    .toggle-row span {
+      font-size: 13px;
+    }
+
+    /* TRIPS MODAL */
+    .trip-card {
+      padding: 14px;
+      border-radius: 14px;
+      margin-bottom: 10px;
+    }
+
+    .trip-card-title {
+      font-size: 17px;
+    }
+
+    .trip-card-dates {
+      font-size: 12px;
+    }
+
+    .trip-card-countdown {
+      font-size: 11px;
+      padding: 3px 8px;
+    }
+
+    .trip-dates-grid {
+      grid-template-columns: 1fr;
+      gap: 8px;
+    }
+
+    .trip-status-options {
+      gap: 4px;
+    }
+
+    .trip-status-option {
+      flex: 1 1 calc(50% - 4px);
+      min-width: auto;
+      font-size: 11px;
+      padding: 8px 6px;
+    }
+
+    .luggage-list {
+      max-height: 220px;
+    }
+
+    .luggage-item {
+      padding: 8px 10px;
+    }
+
+    .luggage-text, .luggage-item input[type="text"] {
+      font-size: 13px;
+    }
+
+    .new-trip-btn {
+      padding: 12px;
+      font-size: 14px;
+      margin-bottom: 14px;
+    }
+
+    /* Footer */
+    footer {
+      padding: 14px;
+      font-size: 11px;
+    }
+  }
+
+  /* MÓVIL MUY PEQUEÑO */
+  @media (max-width: 380px) {
+    .day-cell {
+      min-height: 42px;
+      padding: 3px;
+    }
+
+    .day-number {
+      font-size: 12px;
+    }
+
+    .weekday {
+      font-size: 9px;
+    }
+
+    .water-grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    .gender-options, .palette-options {
+      grid-template-columns: 1fr;
+    }
+
+    .nav-controls .current-period {
+      font-size: 14px;
+    }
+  }
+
+  /* TOUCH DEVICES: agrandar área de tap */
+  @media (hover: none) and (pointer: coarse) {
+    .day-cell {
+      min-height: 56px;
+    }
+
+    button, .checkbox-row, .task-item, .luggage-item,
+    .exercise-tag, .gender-option, .palette-option, .trip-status-option {
+      min-height: 44px;
+    }
+
+    .custom-checkbox {
+      min-width: 26px;
+      min-height: 26px;
+    }
+
+    /* En touch usar botones en vez de drag */
+    .task-handle { display: none; }
+    .task-move-controls { display: flex; }
+    .task-item { cursor: default; }
+    .task-item[draggable="true"] { -webkit-user-drag: none; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <div>
+      <h1><span>Mi</span> Planner</h1>
+      <div class="header-subtitle" id="headerSubtitle">2026</div>
+    </div>
+    <div class="header-right">
+      <div class="tabs">
+        <button class="tab active" data-view="month">Mes</button>
+        <button class="tab" data-view="week">Semana</button>
+      </div>
+      <button class="config-btn" id="tripsBtn" title="Viajes" style="background: var(--c1-suave); color: var(--c1-acento);">✈</button>
+      <button class="config-btn" id="configBtn" title="Configuración">⚙</button>
+    </div>
+  </header>
+
+  <div id="upcomingTripBanner" style="display:none;"></div>
+
+  <div class="nav-controls">
+    <button id="prevBtn">‹</button>
+    <div class="current-period" id="currentPeriod">Mayo 2026</div>
+    <button id="nextBtn">›</button>
+  </div>
+
+  <div class="view active" id="monthView">
+    <div class="month-grid">
+      <div class="weekdays">
+        <div class="weekday">Lun</div>
+        <div class="weekday">Mar</div>
+        <div class="weekday">Mié</div>
+        <div class="weekday">Jue</div>
+        <div class="weekday">Vie</div>
+        <div class="weekday">Sáb</div>
+        <div class="weekday">Dom</div>
+      </div>
+      <div class="days" id="monthDays"></div>
+    </div>
+  </div>
+
+  <div class="view" id="weekView">
+    <div class="week-grid" id="weekDays"></div>
+  </div>
+
+  <div class="legend" id="legend"></div>
+
+  <footer>
+    by <span>Ellerianne</span> · 2026
+  </footer>
+</div>
+
+<!-- BIENVENIDA -->
+<div class="welcome-overlay" id="welcomeOverlay">
+  <div class="welcome-card">
+    <h2>¡Bienvenido a tu Planner!</h2>
+    <div class="welcome-sub">Configura algunos detalles para empezar :)</div>
+
+    <div class="welcome-step">
+      <label>¿Cómo querés que te llamemos?</label>
+      <input type="text" id="welcomeName" placeholder="Tu nombre" maxlength="20">
+    </div>
+
+    <div class="welcome-step">
+      <label>¿Cuál es tu género?</label>
+      <div class="gender-options" id="genderOptions">
+        <div class="gender-option" data-gender="mujer">Mujer</div>
+        <div class="gender-option" data-gender="hombre">Hombre</div>
+        <div class="gender-option" data-gender="no-binarie">No binarie</div>
+        <div class="gender-option" data-gender="prefiero-no-decir">Prefiero no decir</div>
+      </div>
+    </div>
+
+    <div class="welcome-step">
+      <label>¿Quieres trackear tu ciclo menstrual?</label>
+      <div class="toggle-row">
+        <span style="font-size: 13px;">Activar ciclo menstrual</span>
+        <div class="toggle-switch" id="welcomeMenstruation"></div>
+      </div>
+    </div>
+
+    <div class="welcome-step">
+      <label>Elige tu paleta de colores</label>
+      <div class="palette-options" id="paletteOptions">
+        <div class="palette-option selected" data-palette="rosa-lila-verde">
+          <div class="palette-preview">
+            <div class="palette-dot" style="background: #F48FB1"></div>
+            <div class="palette-dot" style="background: #BA68C8"></div>
+            <div class="palette-dot" style="background: #81C784"></div>
+          </div>
+          Rosa, Lila y Verde
+        </div>
+        <div class="palette-option" data-palette="lavanda-celeste">
+          <div class="palette-preview">
+            <div class="palette-dot" style="background: #90CAF9"></div>
+            <div class="palette-dot" style="background: #9575CD"></div>
+            <div class="palette-dot" style="background: #4DD0E1"></div>
+          </div>
+          Lavanda y Celeste
+        </div>
+        <div class="palette-option" data-palette="verde-tierra">
+          <div class="palette-preview">
+            <div class="palette-dot" style="background: #AED581"></div>
+            <div class="palette-dot" style="background: #A1887F"></div>
+            <div class="palette-dot" style="background: #FFF176"></div>
+          </div>
+          Verde y Tierra
+        </div>
+        <div class="palette-option" data-palette="durazno-coral">
+          <div class="palette-preview">
+            <div class="palette-dot" style="background: #FFB74D"></div>
+            <div class="palette-dot" style="background: #E57373"></div>
+            <div class="palette-dot" style="background: #FFEE58"></div>
+          </div>
+          Durazno y Coral
+        </div>
+      </div>
+    </div>
+
+    <button class="save-btn" id="welcomeSaveBtn">Empezar a usar mi planner</button>
+  </div>
+</div>
+
+<!-- CONFIG -->
+<div class="modal-overlay" id="configOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Configuración</div>
+      <button class="close-btn" id="configCloseBtn">✕</button>
+    </div>
+
+    <div class="modal-section">
+      <div class="section-title">Tu nombre</div>
+      <input type="text" id="configName" maxlength="20">
+    </div>
+
+    <div class="modal-section">
+      <div class="section-title">Género</div>
+      <div class="gender-options" id="configGenderOptions">
+        <div class="gender-option" data-gender="mujer">Mujer</div>
+        <div class="gender-option" data-gender="hombre">Hombre</div>
+        <div class="gender-option" data-gender="no-binarie">No binarie</div>
+        <div class="gender-option" data-gender="prefiero-no-decir">Prefiero no decir</div>
+      </div>
+    </div>
+
+    <div class="modal-section">
+      <div class="section-title">Trackers activos</div>
+      <div class="toggle-row" style="margin-bottom: 8px;">
+        <span style="font-size: 14px;">💧 Vasos de agua</span>
+        <div class="toggle-switch" id="configWater"></div>
+      </div>
+      <div class="toggle-row" style="margin-bottom: 8px;">
+        <span style="font-size: 14px;">💪 Ejercicio</span>
+        <div class="toggle-switch" id="configExercise"></div>
+      </div>
+      <div class="toggle-row">
+        <span style="font-size: 14px;">🌸 Ciclo menstrual</span>
+        <div class="toggle-switch" id="configMenstruation"></div>
+      </div>
+    </div>
+
+    <div class="modal-section">
+      <div class="section-title">Paleta de colores</div>
+      <div class="palette-options" id="configPaletteOptions">
+        <div class="palette-option" data-palette="rosa-lila-verde">
+          <div class="palette-preview">
+            <div class="palette-dot" style="background: #F48FB1"></div>
+            <div class="palette-dot" style="background: #BA68C8"></div>
+            <div class="palette-dot" style="background: #81C784"></div>
+          </div>
+          Rosa, Lila y Verde
+        </div>
+        <div class="palette-option" data-palette="lavanda-celeste">
+          <div class="palette-preview">
+            <div class="palette-dot" style="background: #90CAF9"></div>
+            <div class="palette-dot" style="background: #9575CD"></div>
+            <div class="palette-dot" style="background: #4DD0E1"></div>
+          </div>
+          Lavanda y Celeste
+        </div>
+        <div class="palette-option" data-palette="verde-tierra">
+          <div class="palette-preview">
+            <div class="palette-dot" style="background: #AED581"></div>
+            <div class="palette-dot" style="background: #A1887F"></div>
+            <div class="palette-dot" style="background: #FFF176"></div>
+          </div>
+          Verde y Tierra
+        </div>
+        <div class="palette-option" data-palette="durazno-coral">
+          <div class="palette-preview">
+            <div class="palette-dot" style="background: #FFB74D"></div>
+            <div class="palette-dot" style="background: #E57373"></div>
+            <div class="palette-dot" style="background: #FFEE58"></div>
+          </div>
+          Durazno y Coral
+        </div>
+      </div>
+    </div>
+
+    <button class="save-btn" id="configSaveBtn">Guardar cambios</button>
+  </div>
+</div>
+
+<!-- MODAL VIAJES -->
+<div class="modal-overlay" id="tripsOverlay">
+  <div class="trips-modal">
+    <div class="modal-header">
+      <div class="modal-title">✈ Mis viajes</div>
+      <button class="close-btn" id="tripsCloseBtn">✕</button>
+    </div>
+
+    <button class="new-trip-btn" id="newTripBtn">+ Nuevo viaje</button>
+
+    <div id="tripsList"></div>
+  </div>
+</div>
+
+<!-- MODAL DÍA -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Día <span id="modalDate"></span></div>
+      <button class="close-btn" id="closeBtn">✕</button>
+    </div>
+
+    <div class="modal-section">
+      <div class="section-title">Diario del día</div>
+      <textarea id="diaryText" placeholder="¿Cómo estuvo tu día? Escribe lo que quieras..."></textarea>
+    </div>
+
+    <div class="modal-section">
+      <div class="section-title">Tareas del día</div>
+      <div class="task-info" id="taskInfo" style="display:none;"></div>
+      <div class="task-input-row">
+        <input type="text" class="task-input" id="taskInput" placeholder="Nueva tarea (ej: ir al supermercado)" maxlength="100">
+        <button class="add-task-btn" id="addTaskBtn">+</button>
+      </div>
+      <div class="task-list" id="taskList"></div>
+    </div>
+
+    <div class="modal-section" id="waterSection">
+      <div class="section-title">Agua (8 vasos)</div>
+      <div class="water-grid" id="waterGrid"></div>
+    </div>
+
+    <div class="modal-section" id="exerciseSection">
+      <div class="section-title">Ejercicio</div>
+      <div class="checkbox-row" id="exerciseRow">
+        <div class="custom-checkbox" id="exerciseCheck"></div>
+        <span>Me ejercité hoy</span>
+      </div>
+      <div class="exercise-section" id="exerciseDetails" style="display:none;">
+        <div class="exercise-types" id="exerciseTypes">
+          <div class="exercise-tag" data-type="piernas">Piernas</div>
+          <div class="exercise-tag" data-type="brazos">Brazos</div>
+          <div class="exercise-tag" data-type="pesas">Pesas</div>
+          <div class="exercise-tag" data-type="cardio">Cardio</div>
+          <div class="exercise-tag" data-type="abdomen">Abdomen</div>
+          <div class="exercise-tag" data-type="yoga">Yoga</div>
+          <div class="exercise-tag" data-type="caminata">Caminata</div>
+        </div>
+        <input type="text" class="exercise-extra" id="exerciseNote" placeholder="Otra actividad o detalles...">
+      </div>
+    </div>
+
+    <div class="modal-section" id="menstruationSection">
+      <div class="section-title">Menstruación</div>
+      <div class="checkbox-row menstruation-toggle" id="menstruationToggle">
+        <div class="custom-checkbox" id="menstruationCheck"></div>
+        <span>Hoy tengo menstruación</span>
+      </div>
+      <div class="menstruation-info" id="menstruationInfo">
+        Registra al menos <strong>3 ciclos</strong> para activar la predicción.
+        <div id="cycleStats" style="margin-top: 8px;"></div>
+      </div>
+    </div>
+
+    <div class="modal-section">
+      <div class="section-title">Mis trackers personales</div>
+      <div id="customTrackersList"></div>
+      <button class="add-tracker-btn" id="addTrackerBtn">+ Agregar tracker</button>
+    </div>
+
+    <button class="save-btn" id="saveBtn">Guardar día</button>
+  </div>
+</div>
+
+<script>
+  // ESTADO
+  let currentDate = new Date();
+  let viewMode = 'month';
+  let selectedDate = null;
+  let dayData = {};
+  let customTrackers = [];
+  let trips = [];
+  let settings = {
+    name: '',
+    gender: '',
+    palette: 'rosa-lila-verde',
+    trackWater: true,
+    trackExercise: true,
+    trackMenstruation: true,
+    onboarded: false
+  };
+
+  const MONTH_NAMES = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+                       'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+  const WEEKDAY_NAMES = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+  const WEEKDAY_SHORT = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+
+  const hasStorage = typeof window.storage !== 'undefined';
+  const hasLocalStorage = typeof localStorage !== 'undefined';
+
+  async function loadData() {
+    // Intentar primero window.storage (entorno Claude), después localStorage (navegador normal)
+    if (hasStorage) {
+      try {
+        const result = await window.storage.get('planner-data-v2');
+        if (result && result.value) {
+          const parsed = JSON.parse(result.value);
+          dayData = parsed.dayData || {};
+          customTrackers = parsed.customTrackers || [];
+          trips = parsed.trips || [];
+          settings = { ...settings, ...(parsed.settings || {}) };
+          return;
+        }
+      } catch (e) {
+        // pass
+      }
+    }
+    if (hasLocalStorage) {
+      try {
+        const raw = localStorage.getItem('planner-data-v2');
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          dayData = parsed.dayData || {};
+          customTrackers = parsed.customTrackers || [];
+          trips = parsed.trips || [];
+          settings = { ...settings, ...(parsed.settings || {}) };
+        }
+      } catch (e) {
+        console.log('Sin datos previos');
+      }
+    }
+  }
+
+  async function saveData() {
+    const payload = JSON.stringify({ dayData, customTrackers, trips, settings });
+    if (hasStorage) {
+      try {
+        await window.storage.set('planner-data-v2', payload);
+      } catch (e) {
+        console.error('Error guardando en storage:', e);
+      }
+    }
+    if (hasLocalStorage) {
+      try {
+        localStorage.setItem('planner-data-v2', payload);
+      } catch (e) {
+        console.error('Error guardando en localStorage:', e);
+      }
+    }
+  }
+
+  function dateKey(date) {
+    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+  }
+
+  function getDayData(date) {
+    const key = dateKey(date);
+    if (!dayData[key]) {
+      dayData[key] = {
+        diary: '',
+        water: [false, false, false, false, false, false, false, false],
+        exercise: false,
+        exerciseTypes: [],
+        exerciseNote: '',
+        menstruation: false,
+        customChecks: {},
+        tasks: []
+      };
+    }
+    // Asegurar que tasks exista en datos antiguos
+    if (!dayData[key].tasks) dayData[key].tasks = [];
+    return dayData[key];
+  }
+
+  // PREDICCIÓN
+  function getMenstruationDays() {
+    const days = [];
+    for (const key in dayData) {
+      if (dayData[key].menstruation) {
+        days.push(new Date(key + 'T00:00:00'));
+      }
+    }
+    return days.sort((a, b) => a - b);
+  }
+
+  function getCycleStarts() {
+    const days = getMenstruationDays();
+    if (days.length === 0) return [];
+    const starts = [days[0]];
+    for (let i = 1; i < days.length; i++) {
+      const diff = (days[i] - days[i-1]) / (1000 * 60 * 60 * 24);
+      if (diff > 7) starts.push(days[i]);
+    }
+    return starts;
+  }
+
+  function getAverageCycle() {
+    const starts = getCycleStarts();
+    if (starts.length < 2) return null;
+    let total = 0;
+    for (let i = 1; i < starts.length; i++) {
+      total += (starts[i] - starts[i-1]) / (1000 * 60 * 60 * 24);
+    }
+    return Math.round(total / (starts.length - 1));
+  }
+
+  function predictNextPeriods() {
+    if (!settings.trackMenstruation) return [];
+    const starts = getCycleStarts();
+    if (starts.length < 3) return [];
+    const avg = getAverageCycle();
+    if (!avg) return [];
+
+    const predictions = [];
+    let lastStart = starts[starts.length - 1];
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    for (let i = 0; i < 6; i++) {
+      const next = new Date(lastStart);
+      next.setDate(next.getDate() + avg);
+      if (next > today) {
+        for (let d = 0; d < 5; d++) {
+          const day = new Date(next);
+          day.setDate(day.getDate() + d);
+          predictions.push(dateKey(day));
+        }
+      }
+      lastStart = next;
+    }
+    return predictions;
+  }
+
+  function isPredictedMenstruation(date) {
+    const predictions = predictNextPeriods();
+    return predictions.includes(dateKey(date));
+  }
+
+  // APLICAR PALETA
+  function applyPalette() {
+    document.documentElement.setAttribute('data-palette', settings.palette);
+  }
+
+  function updateHeader() {
+    document.getElementById('headerSubtitle').textContent =
+      (settings.name ? settings.name + ' · ' : '') + '2026';
+  }
+
+  function updateLegend() {
+    const legend = document.getElementById('legend');
+    let items = [];
+    if (settings.trackExercise) items.push('<div class="legend-item"><span class="legend-dot" style="background: var(--c3-fuerte)"></span> Ejercicio</div>');
+    if (settings.trackWater) items.push('<div class="legend-item"><span class="legend-dot" style="background: #4FC3F7"></span> Agua completa</div>');
+    items.push('<div class="legend-item"><span class="legend-dot" style="background: var(--c2-fuerte)"></span> Nota</div>');
+    items.push('<div class="legend-item"><span class="legend-dot" style="background: var(--c1-acento)"></span> Tareas pendientes</div>');
+    if (settings.trackMenstruation) {
+      items.push('<div class="legend-item"><span class="legend-dot" style="background: #EF5350"></span> Menstruación</div>');
+      items.push('<div class="legend-item"><span class="legend-dot" style="background: repeating-linear-gradient(45deg, #FFCDD2, #FFCDD2 4px, #EF5350 4px, #EF5350 8px)"></span> Predicción ciclo</div>');
+    }
+    legend.innerHTML = items.join('');
+  }
+
+  // VISTAS
+  function renderMonthView() {
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth();
+    document.getElementById('currentPeriod').textContent = `${MONTH_NAMES[month]} ${year}`;
+
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+    const startWeekday = (firstDay.getDay() + 6) % 7;
+
+    const daysContainer = document.getElementById('monthDays');
+    daysContainer.innerHTML = '';
+
+    const prevMonthLastDay = new Date(year, month, 0).getDate();
+    for (let i = startWeekday - 1; i >= 0; i--) {
+      const day = prevMonthLastDay - i;
+      daysContainer.appendChild(createDayCell(new Date(year, month - 1, day), true));
+    }
+
+    for (let day = 1; day <= lastDay.getDate(); day++) {
+      daysContainer.appendChild(createDayCell(new Date(year, month, day), false));
+    }
+
+    const totalCells = daysContainer.children.length;
+    const remaining = (7 - (totalCells % 7)) % 7;
+    for (let day = 1; day <= remaining; day++) {
+      daysContainer.appendChild(createDayCell(new Date(year, month + 1, day), true));
+    }
+  }
+
+  function createDayCell(date, otherMonth) {
+    const cell = document.createElement('div');
+    cell.className = 'day-cell';
+    if (otherMonth) cell.classList.add('other-month');
+
+    const today = new Date();
+    if (date.toDateString() === today.toDateString()) {
+      cell.classList.add('today');
+    }
+
+    const trip = isDayInTrip(date);
+    const data = dayData[dateKey(date)];
+
+    if (trip) {
+      cell.classList.add('is-trip');
+      if (isTripStart(date, trip)) cell.classList.add('is-trip-start');
+      if (isTripEnd(date, trip)) cell.classList.add('is-trip-end');
+    } else if (settings.trackMenstruation && data && data.menstruation) {
+      cell.classList.add('menstruation');
+    } else if (isPredictedMenstruation(date)) {
+      cell.classList.add('predicted-menstruation');
+    } else if (data && (data.diary || (settings.trackExercise && data.exercise) || (settings.trackWater && data.water.some(w => w)))) {
+      cell.classList.add('has-data');
+    }
+
+    const num = document.createElement('div');
+    num.className = 'day-number';
+    num.textContent = date.getDate();
+    cell.appendChild(num);
+
+    // Icono de viaje
+    if (trip) {
+      const tripIcon = document.createElement('div');
+      tripIcon.className = 'trip-icon';
+      tripIcon.textContent = '✈';
+      tripIcon.title = trip.name || trip.destination || 'Viaje';
+      cell.appendChild(tripIcon);
+    }
+
+    if (data) {
+      const indicators = document.createElement('div');
+      indicators.className = 'day-indicators';
+      if (settings.trackExercise && data.exercise) {
+        const ind = document.createElement('div');
+        ind.className = 'indicator exercise';
+        indicators.appendChild(ind);
+      }
+      if (settings.trackWater && data.water.every(w => w)) {
+        const ind = document.createElement('div');
+        ind.className = 'indicator water';
+        indicators.appendChild(ind);
+      }
+      if (data.diary && data.diary.length > 0) {
+        const ind = document.createElement('div');
+        ind.className = 'indicator note';
+        indicators.appendChild(ind);
+      }
+      if (settings.trackMenstruation && data.menstruation) {
+        const ind = document.createElement('div');
+        ind.className = 'indicator menstruation';
+        indicators.appendChild(ind);
+      }
+      // Indicador de tareas pendientes
+      if (data.tasks && data.tasks.some(t => !t.done)) {
+        const ind = document.createElement('div');
+        ind.className = 'indicator task-pending';
+        ind.style.background = 'var(--c1-acento)';
+        indicators.appendChild(ind);
+      }
+      cell.appendChild(indicators);
+    }
+
+    cell.addEventListener('click', () => openModal(date));
+    return cell;
+  }
+
+  function renderWeekView() {
+    const date = new Date(currentDate);
+    const dayOfWeek = (date.getDay() + 6) % 7;
+    const monday = new Date(date);
+    monday.setDate(date.getDate() - dayOfWeek);
+    const sunday = new Date(monday);
+    sunday.setDate(monday.getDate() + 6);
+
+    const sameMonth = monday.getMonth() === sunday.getMonth();
+    document.getElementById('currentPeriod').textContent = sameMonth
+      ? `${monday.getDate()} - ${sunday.getDate()} ${MONTH_NAMES[monday.getMonth()]} ${monday.getFullYear()}`
+      : `${monday.getDate()} ${MONTH_NAMES[monday.getMonth()]} - ${sunday.getDate()} ${MONTH_NAMES[sunday.getMonth()]} ${sunday.getFullYear()}`;
+
+    const container = document.getElementById('weekDays');
+    container.innerHTML = '';
+    for (let i = 0; i < 7; i++) {
+      const d = new Date(monday);
+      d.setDate(monday.getDate() + i);
+      container.appendChild(createWeekDayCell(d));
+    }
+  }
+
+  function createWeekDayCell(date) {
+    const cell = document.createElement('div');
+    cell.className = 'week-day';
+    const today = new Date();
+    if (date.toDateString() === today.toDateString()) {
+      cell.classList.add('today');
+    }
+
+    const trip = isDayInTrip(date);
+    if (trip) {
+      cell.style.background = 'linear-gradient(135deg, #B3E5FC, var(--c2-suave))';
+    }
+
+    const header = document.createElement('div');
+    header.className = 'week-day-header';
+    const tripBadge = trip ? ' ✈' : '';
+    header.innerHTML = `
+      <div class="week-day-name">${WEEKDAY_SHORT[date.getDay()]}${tripBadge}</div>
+      <div class="week-day-number">${date.getDate()}</div>
+    `;
+    cell.appendChild(header);
+
+    const data = dayData[dateKey(date)];
+    const content = document.createElement('div');
+    content.className = 'week-day-content';
+    if (data && data.diary) {
+      content.textContent = data.diary.substring(0, 100) + (data.diary.length > 100 ? '...' : '');
+    }
+    cell.appendChild(content);
+
+    if (data) {
+      const checks = document.createElement('div');
+      checks.className = 'week-day-mini-checks';
+      if (settings.trackExercise && data.exercise) {
+        const c = document.createElement('div');
+        c.className = 'mini-check active';
+        c.textContent = '💪';
+        checks.appendChild(c);
+      }
+      if (settings.trackWater) {
+        const filledWater = data.water.filter(w => w).length;
+        if (filledWater > 0) {
+          const c = document.createElement('div');
+          c.className = 'mini-check active';
+          c.textContent = `💧 ${filledWater}/8`;
+          checks.appendChild(c);
+        }
+      }
+      if (settings.trackMenstruation && data.menstruation) {
+        const c = document.createElement('div');
+        c.className = 'mini-check active';
+        c.textContent = '🌸';
+        checks.appendChild(c);
+      }
+      // Tareas pendientes / completadas
+      if (data.tasks && data.tasks.length > 0) {
+        const pending = data.tasks.filter(t => !t.done).length;
+        const done = data.tasks.filter(t => t.done).length;
+        if (pending > 0 || done > 0) {
+          const c = document.createElement('div');
+          c.className = 'mini-check active';
+          c.textContent = `📋 ${done}/${data.tasks.length}`;
+          checks.appendChild(c);
+        }
+      }
+      cell.appendChild(checks);
+    }
+
+    cell.addEventListener('click', () => openModal(date));
+    return cell;
+  }
+
+  // MODAL DÍA
+  function openModal(date) {
+    selectedDate = new Date(date);
+
+    // Migrar tareas pendientes del día anterior (solo si abrimos un día de hoy o futuro)
+    migrateUncompletedTasks(date);
+
+    const data = getDayData(date);
+
+    document.getElementById('modalDate').textContent =
+      `${WEEKDAY_NAMES[date.getDay()]} ${date.getDate()} de ${MONTH_NAMES[date.getMonth()]}`;
+
+    document.getElementById('diaryText').value = data.diary;
+
+    // Renderizar tareas
+    renderTasks(data, date);
+
+    // Mostrar/ocultar secciones según trackers activos
+    document.getElementById('waterSection').style.display = settings.trackWater ? 'block' : 'none';
+    document.getElementById('exerciseSection').style.display = settings.trackExercise ? 'block' : 'none';
+    document.getElementById('menstruationSection').style.display = settings.trackMenstruation ? 'block' : 'none';
+
+    if (settings.trackWater) {
+      const waterGrid = document.getElementById('waterGrid');
+      waterGrid.innerHTML = '';
+      for (let i = 0; i < 8; i++) {
+        const glass = document.createElement('div');
+        glass.className = 'water-glass';
+        if (data.water[i]) glass.classList.add('filled');
+        glass.textContent = data.water[i] ? '💧' : '🥛';
+        glass.addEventListener('click', () => {
+          data.water[i] = !data.water[i];
+          glass.classList.toggle('filled');
+          glass.textContent = data.water[i] ? '💧' : '🥛';
+        });
+        waterGrid.appendChild(glass);
+      }
+    }
+
+    if (settings.trackExercise) {
+      document.getElementById('exerciseCheck').classList.toggle('checked', data.exercise);
+      document.getElementById('exerciseDetails').style.display = data.exercise ? 'flex' : 'none';
+      document.querySelectorAll('.exercise-tag').forEach(tag => {
+        tag.classList.toggle('selected', data.exerciseTypes.includes(tag.dataset.type));
+      });
+      document.getElementById('exerciseNote').value = data.exerciseNote || '';
+    }
+
+    if (settings.trackMenstruation) {
+      document.getElementById('menstruationCheck').classList.toggle('checked', data.menstruation);
+      document.getElementById('menstruationToggle').classList.toggle('active', data.menstruation);
+      updateCycleStats();
+    }
+
+    renderCustomTrackers(data);
+    document.getElementById('modalOverlay').classList.add('active');
+  }
+
+  function updateCycleStats() {
+    const starts = getCycleStarts();
+    const avg = getAverageCycle();
+    const statsEl = document.getElementById('cycleStats');
+    if (starts.length === 0) {
+      statsEl.innerHTML = '';
+    } else if (starts.length === 1) {
+      statsEl.innerHTML = `Tienes <strong>1 ciclo registrado</strong>. Faltan 2 para la predicción.`;
+    } else if (starts.length === 2) {
+      statsEl.innerHTML = `Tienes <strong>2 ciclos registrados</strong>. Falta 1 para la predicción. <br>Ciclo promedio: <strong>${avg} días</strong>`;
+    } else {
+      statsEl.innerHTML = `Tienes <strong>${starts.length} ciclos registrados</strong>. <br>Ciclo promedio: <strong>${avg} días</strong> · Predicción activa ✨`;
+    }
+  }
+
+  // TAREAS DEL DÍA
+  function migrateUncompletedTasks(targetDate) {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const target = new Date(targetDate);
+    target.setHours(0, 0, 0, 0);
+
+    // Solo migrar al abrir un día que sea HOY o futuro (no en el pasado)
+    if (target < today) return;
+
+    // Buscar día anterior al target
+    const prevDate = new Date(target);
+    prevDate.setDate(prevDate.getDate() - 1);
+    const prevKey = dateKey(prevDate);
+    const targetKey = dateKey(target);
+
+    if (!dayData[prevKey] || !dayData[prevKey].tasks) return;
+
+    const pending = dayData[prevKey].tasks.filter(t => !t.done && !t.migrated);
+    if (pending.length === 0) return;
+
+    // Asegurar que el día target exista
+    if (!dayData[targetKey]) {
+      dayData[targetKey] = {
+        diary: '', water: [false, false, false, false, false, false, false, false],
+        exercise: false, exerciseTypes: [], exerciseNote: '',
+        menstruation: false, customChecks: {}, tasks: []
+      };
+    }
+    if (!dayData[targetKey].tasks) dayData[targetKey].tasks = [];
+
+    // Migrar las pendientes (sin duplicar si ya están ahí)
+    pending.forEach(task => {
+      const alreadyMigrated = dayData[targetKey].tasks.some(t =>
+        t.text === task.text && t.fromMigration
+      );
+      if (!alreadyMigrated) {
+        dayData[targetKey].tasks.push({
+          id: Date.now() + Math.random(),
+          text: task.text,
+          done: false,
+          fromMigration: true
+        });
+      }
+      // Marcar la original como migrada para no traerla otra vez
+      task.migrated = true;
+    });
+  }
+
+  function renderTasks(data, date) {
+    const list = document.getElementById('taskList');
+    const info = document.getElementById('taskInfo');
+    list.innerHTML = '';
+
+    // Mostrar info sobre tareas migradas
+    const migratedCount = data.tasks.filter(t => t.fromMigration && !t.done).length;
+    if (migratedCount > 0) {
+      info.style.display = 'block';
+      info.classList.add('task-info-pending');
+      info.textContent = `📌 ${migratedCount} ${migratedCount === 1 ? 'tarea pendiente del día anterior' : 'tareas pendientes del día anterior'}`;
+    } else {
+      info.style.display = 'none';
+      info.classList.remove('task-info-pending');
+    }
+
+    data.tasks.forEach((task, idx) => {
+      const item = document.createElement('div');
+      item.className = 'task-item';
+      if (task.done) item.classList.add('checked');
+      item.draggable = true;
+      item.dataset.idx = idx;
+
+      // Botones de mover (visibles en celular, ocultos en escritorio que usa drag)
+      const moveControls = document.createElement('div');
+      moveControls.className = 'task-move-controls';
+
+      const upBtn = document.createElement('button');
+      upBtn.className = 'task-move-btn';
+      upBtn.textContent = '▲';
+      upBtn.title = 'Subir';
+      upBtn.disabled = idx === 0;
+      upBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (idx === 0) return;
+        [data.tasks[idx - 1], data.tasks[idx]] = [data.tasks[idx], data.tasks[idx - 1]];
+        renderTasks(data, date);
+      });
+
+      const downBtn = document.createElement('button');
+      downBtn.className = 'task-move-btn';
+      downBtn.textContent = '▼';
+      downBtn.title = 'Bajar';
+      downBtn.disabled = idx === data.tasks.length - 1;
+      downBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (idx === data.tasks.length - 1) return;
+        [data.tasks[idx + 1], data.tasks[idx]] = [data.tasks[idx], data.tasks[idx + 1]];
+        renderTasks(data, date);
+      });
+
+      moveControls.appendChild(upBtn);
+      moveControls.appendChild(downBtn);
+
+      const handle = document.createElement('span');
+      handle.className = 'task-handle';
+      handle.textContent = '⋮⋮';
+
+      const checkbox = document.createElement('div');
+      checkbox.className = 'custom-checkbox';
+      if (task.done) checkbox.classList.add('checked');
+      checkbox.addEventListener('click', (e) => {
+        e.stopPropagation();
+        task.done = !task.done;
+        renderTasks(data, date);
+      });
+
+      const text = document.createElement('span');
+      text.className = 'task-text';
+      text.textContent = task.text;
+      if (task.fromMigration) {
+        text.innerHTML = '📌 ' + task.text;
+      }
+
+      const deleteBtn = document.createElement('button');
+      deleteBtn.className = 'task-delete';
+      deleteBtn.textContent = '✕';
+      deleteBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        data.tasks.splice(idx, 1);
+        renderTasks(data, date);
+      });
+
+      item.appendChild(moveControls);
+      item.appendChild(handle);
+      item.appendChild(checkbox);
+      item.appendChild(text);
+      item.appendChild(deleteBtn);
+
+      // Drag and drop (solo escritorio)
+      item.addEventListener('dragstart', (e) => {
+        item.classList.add('dragging');
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/plain', idx);
+      });
+
+      item.addEventListener('dragend', () => {
+        item.classList.remove('dragging');
+        document.querySelectorAll('.task-item').forEach(i => i.classList.remove('drag-over'));
+      });
+
+      item.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        item.classList.add('drag-over');
+      });
+
+      item.addEventListener('dragleave', () => {
+        item.classList.remove('drag-over');
+      });
+
+      item.addEventListener('drop', (e) => {
+        e.preventDefault();
+        const fromIdx = parseInt(e.dataTransfer.getData('text/plain'));
+        const toIdx = parseInt(item.dataset.idx);
+        if (fromIdx !== toIdx) {
+          const [moved] = data.tasks.splice(fromIdx, 1);
+          data.tasks.splice(toIdx, 0, moved);
+          renderTasks(data, date);
+        }
+      });
+
+      list.appendChild(item);
+    });
+  }
+
+  function addTask(text) {
+    if (!text.trim()) return;
+    const data = getDayData(selectedDate);
+    data.tasks.push({
+      id: Date.now() + Math.random(),
+      text: text.trim(),
+      done: false
+    });
+    renderTasks(data, selectedDate);
+  }
+
+  // VIAJES
+  const DEFAULT_LUGGAGE = [
+    'Documento de identidad / Pasaporte',
+    'Pasajes / Reservas',
+    'Tarjetas (débito / crédito)',
+    'Dinero en efectivo',
+    'Cargadores (celular, etc)',
+    'Audífonos',
+    'Ropa interior',
+    'Calcetines',
+    'Pijama',
+    'Ropa de día',
+    'Zapatos cómodos',
+    'Cepillo de dientes y pasta',
+    'Shampoo y acondicionador',
+    'Desodorante',
+    'Toalla',
+    'Medicamentos',
+    'Lentes (de sol, ópticos)',
+    'Libro / lectura',
+    'Bolsa para ropa sucia'
+  ];
+
+  function createNewTrip() {
+    const trip = {
+      id: Date.now() + Math.random(),
+      name: 'Nuevo viaje',
+      destination: '',
+      dateStart: '',
+      dateEnd: '',
+      transport: '',
+      ticketsStatus: 'no-comprados',
+      lodgingStatus: 'no-buscado',
+      luggage: DEFAULT_LUGGAGE.map(item => ({ text: item, done: false, id: Date.now() + Math.random() })),
+      notes: '',
+      expanded: true
+    };
+    trips.push(trip);
+    return trip;
+  }
+
+  function isDayInTrip(date) {
+    const dKey = dateKey(date);
+    for (const trip of trips) {
+      if (!trip.dateStart || !trip.dateEnd) continue;
+      if (dKey >= trip.dateStart && dKey <= trip.dateEnd) {
+        return trip;
+      }
+    }
+    return null;
+  }
+
+  function isTripStart(date, trip) {
+    return dateKey(date) === trip.dateStart;
+  }
+
+  function isTripEnd(date, trip) {
+    return dateKey(date) === trip.dateEnd;
+  }
+
+  function daysUntil(dateStr) {
+    if (!dateStr) return null;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const target = new Date(dateStr + 'T00:00:00');
+    const diff = Math.round((target - today) / (1000 * 60 * 60 * 24));
+    return diff;
+  }
+
+  function updateUpcomingTripBanner() {
+    const banner = document.getElementById('upcomingTripBanner');
+    if (!trips || trips.length === 0) {
+      banner.style.display = 'none';
+      return;
+    }
+
+    // Buscar el viaje más próximo (que no haya terminado)
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const todayKey = dateKey(today);
+
+    let upcomingTrip = null;
+    let minDays = Infinity;
+
+    for (const trip of trips) {
+      if (!trip.dateStart) continue;
+      // Si el viaje ya terminó, lo ignoramos
+      if (trip.dateEnd && trip.dateEnd < todayKey) continue;
+
+      const days = daysUntil(trip.dateStart);
+      if (days === null) continue;
+
+      // Si está en curso o futuro
+      if (days <= 0 && trip.dateEnd >= todayKey) {
+        upcomingTrip = trip;
+        minDays = 0;
+        break;
+      } else if (days > 0 && days < minDays) {
+        upcomingTrip = trip;
+        minDays = days;
+      }
+    }
+
+    if (!upcomingTrip) {
+      banner.style.display = 'none';
+      return;
+    }
+
+    let text;
+    const tripName = upcomingTrip.name || upcomingTrip.destination || 'tu viaje';
+    if (minDays === 0) {
+      text = `<span class="trip-emoji">✈</span> Estás de viaje: <strong>${tripName}</strong>`;
+    } else if (minDays === 1) {
+      text = `<span class="trip-emoji">✈</span> ¡Mañana es el viaje a <strong>${tripName}</strong>!`;
+    } else {
+      text = `<span class="trip-emoji">✈</span> Faltan <strong>${minDays} días</strong> para <strong>${tripName}</strong>`;
+    }
+    banner.innerHTML = text;
+    banner.style.display = 'block';
+  }
+
+  function openTripsModal() {
+    renderTripsList();
+    document.getElementById('tripsOverlay').classList.add('active');
+  }
+
+  function renderTripsList() {
+    const container = document.getElementById('tripsList');
+    container.innerHTML = '';
+
+    if (trips.length === 0) {
+      container.innerHTML = '<div class="no-trips">Aún no tienes viajes planificados.<br>Haz clic en "+ Nuevo viaje" para empezar ✈</div>';
+      return;
+    }
+
+    // Ordenar: futuros primero (más cercanos), después en curso, después pasados
+    const sortedTrips = [...trips].sort((a, b) => {
+      const aDate = a.dateStart || '9999-99-99';
+      const bDate = b.dateStart || '9999-99-99';
+      return aDate.localeCompare(bDate);
+    });
+
+    sortedTrips.forEach(trip => {
+      container.appendChild(createTripCard(trip));
+    });
+  }
+
+  function createTripCard(trip) {
+    const card = document.createElement('div');
+    card.className = 'trip-card';
+    if (trip.expanded) card.classList.add('expanded');
+
+    // Header
+    const header = document.createElement('div');
+    header.className = 'trip-card-header';
+
+    const headerInfo = document.createElement('div');
+    headerInfo.style.flexGrow = '1';
+
+    const title = document.createElement('div');
+    title.className = 'trip-card-title';
+    title.textContent = trip.name || 'Nuevo viaje';
+    headerInfo.appendChild(title);
+
+    if (trip.dateStart) {
+      const dates = document.createElement('div');
+      dates.className = 'trip-card-dates';
+      const startStr = formatDateLong(trip.dateStart);
+      const endStr = trip.dateEnd ? formatDateLong(trip.dateEnd) : '';
+      dates.textContent = endStr ? `${startStr} → ${endStr}` : startStr;
+      headerInfo.appendChild(dates);
+    }
+
+    header.appendChild(headerInfo);
+
+    // Countdown badge
+    if (trip.dateStart) {
+      const days = daysUntil(trip.dateStart);
+      const todayKey = dateKey(new Date());
+      const badge = document.createElement('div');
+      badge.className = 'trip-card-countdown';
+      if (trip.dateEnd && trip.dateEnd < todayKey) {
+        badge.classList.add('past');
+        badge.textContent = '✓ Pasado';
+      } else if (days <= 0 && trip.dateEnd >= todayKey) {
+        badge.classList.add('now');
+        badge.textContent = '● En curso';
+      } else if (days === 1) {
+        badge.textContent = 'Mañana';
+      } else if (days > 1) {
+        badge.textContent = `En ${days} días`;
+      } else {
+        badge.textContent = 'Sin fecha';
+      }
+      header.appendChild(badge);
+    }
+
+    header.addEventListener('click', () => {
+      trip.expanded = !trip.expanded;
+      card.classList.toggle('expanded');
+    });
+
+    card.appendChild(header);
+
+    // Body
+    const body = document.createElement('div');
+    body.className = 'trip-card-body';
+
+    // Nombre/destino
+    body.appendChild(makeField('Nombre del viaje', 'text', trip.name, (v) => {
+      trip.name = v;
+      title.textContent = v || 'Nuevo viaje';
+      updateUpcomingTripBanner();
+    }));
+
+    body.appendChild(makeField('Destino', 'text', trip.destination, (v) => {
+      trip.destination = v;
+    }, '¿A dónde viajas? (ej: Buenos Aires, Argentina)'));
+
+    // Fechas
+    const datesRow = document.createElement('div');
+    datesRow.className = 'trip-field-row';
+    const datesLabel = document.createElement('label');
+    datesLabel.className = 'trip-field-label';
+    datesLabel.textContent = 'Fechas';
+    datesRow.appendChild(datesLabel);
+
+    const datesGrid = document.createElement('div');
+    datesGrid.className = 'trip-dates-grid';
+
+    const startInput = document.createElement('input');
+    startInput.type = 'date';
+    startInput.value = trip.dateStart || '';
+    startInput.addEventListener('change', (e) => {
+      trip.dateStart = e.target.value;
+      renderTripsList();
+      render();
+      updateUpcomingTripBanner();
+    });
+
+    const endInput = document.createElement('input');
+    endInput.type = 'date';
+    endInput.value = trip.dateEnd || '';
+    endInput.addEventListener('change', (e) => {
+      trip.dateEnd = e.target.value;
+      renderTripsList();
+      render();
+      updateUpcomingTripBanner();
+    });
+
+    datesGrid.appendChild(startInput);
+    datesGrid.appendChild(endInput);
+    datesRow.appendChild(datesGrid);
+    body.appendChild(datesRow);
+
+    // Transporte
+    body.appendChild(makeStatusField('Transporte', [
+      { value: 'avion', label: '✈ Avión' },
+      { value: 'bus', label: '🚌 Bus' },
+      { value: 'auto', label: '🚗 Auto' },
+      { value: 'tren', label: '🚆 Tren' },
+      { value: 'barco', label: '🚢 Barco' },
+      { value: 'otro', label: 'Otro' }
+    ], trip.transport, (v) => { trip.transport = v; }));
+
+    // Estado pasajes
+    body.appendChild(makeStatusField('Pasajes', [
+      { value: 'no-comprados', label: 'No comprados' },
+      { value: 'reservados', label: 'Reservados' },
+      { value: 'comprados', label: '✓ Comprados' }
+    ], trip.ticketsStatus, (v) => { trip.ticketsStatus = v; }));
+
+    // Estado hospedaje
+    body.appendChild(makeStatusField('Hospedaje', [
+      { value: 'no-buscado', label: 'No buscado' },
+      { value: 'reservado', label: 'Reservado' },
+      { value: 'pagado', label: '✓ Pagado' }
+    ], trip.lodgingStatus, (v) => { trip.lodgingStatus = v; }));
+
+    // Maleta
+    const luggageRow = document.createElement('div');
+    luggageRow.className = 'trip-field-row';
+    const luggageLabel = document.createElement('label');
+    luggageLabel.className = 'trip-field-label';
+    const totalLuggage = trip.luggage.length;
+    const doneLuggage = trip.luggage.filter(l => l.done).length;
+    luggageLabel.textContent = `Maleta (${doneLuggage}/${totalLuggage})`;
+    luggageRow.appendChild(luggageLabel);
+
+    const luggageList = document.createElement('div');
+    luggageList.className = 'luggage-list';
+    renderLuggage(trip, luggageList, luggageLabel);
+    luggageRow.appendChild(luggageList);
+
+    // Agregar nuevo ítem a maleta
+    const luggageAdd = document.createElement('div');
+    luggageAdd.className = 'luggage-add-row';
+    const luggageInput = document.createElement('input');
+    luggageInput.type = 'text';
+    luggageInput.placeholder = 'Agregar a la maleta...';
+    luggageInput.maxLength = 60;
+    const luggageBtn = document.createElement('button');
+    luggageBtn.className = 'luggage-add-btn';
+    luggageBtn.textContent = '+';
+
+    const addLuggageItem = () => {
+      const text = luggageInput.value.trim();
+      if (!text) return;
+      trip.luggage.push({ text, done: false, id: Date.now() + Math.random() });
+      luggageInput.value = '';
+      renderLuggage(trip, luggageList, luggageLabel);
+    };
+    luggageBtn.addEventListener('click', addLuggageItem);
+    luggageInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') addLuggageItem();
+    });
+
+    luggageAdd.appendChild(luggageInput);
+    luggageAdd.appendChild(luggageBtn);
+    luggageRow.appendChild(luggageAdd);
+    body.appendChild(luggageRow);
+
+    // Notas
+    const notesRow = document.createElement('div');
+    notesRow.className = 'trip-field-row';
+    const notesLabel = document.createElement('label');
+    notesLabel.className = 'trip-field-label';
+    notesLabel.textContent = 'Notas';
+    notesRow.appendChild(notesLabel);
+    const notesArea = document.createElement('textarea');
+    notesArea.rows = 4;
+    notesArea.placeholder = 'Presupuesto, qué visitar, recordatorios...';
+    notesArea.value = trip.notes || '';
+    notesArea.addEventListener('input', (e) => { trip.notes = e.target.value; });
+    notesRow.appendChild(notesArea);
+    body.appendChild(notesRow);
+
+    // Acciones
+    const actions = document.createElement('div');
+    actions.className = 'trip-actions';
+    const deleteBtn = document.createElement('button');
+    deleteBtn.className = 'trip-delete-btn';
+    deleteBtn.textContent = '🗑 Eliminar viaje';
+    deleteBtn.addEventListener('click', () => {
+      if (confirm(`¿Eliminar el viaje "${trip.name}"?`)) {
+        const idx = trips.findIndex(t => t.id === trip.id);
+        if (idx !== -1) trips.splice(idx, 1);
+        renderTripsList();
+        render();
+        updateUpcomingTripBanner();
+      }
+    });
+    actions.appendChild(deleteBtn);
+    body.appendChild(actions);
+
+    card.appendChild(body);
+    return card;
+  }
+
+  function renderLuggage(trip, container, labelEl) {
+    container.innerHTML = '';
+    trip.luggage.forEach((item, idx) => {
+      const row = document.createElement('div');
+      row.className = 'luggage-item';
+      if (item.done) row.classList.add('checked');
+
+      const checkbox = document.createElement('div');
+      checkbox.className = 'custom-checkbox';
+      if (item.done) checkbox.classList.add('checked');
+      checkbox.addEventListener('click', () => {
+        item.done = !item.done;
+        renderLuggage(trip, container, labelEl);
+      });
+
+      const text = document.createElement('span');
+      text.className = 'luggage-text';
+      text.textContent = item.text;
+
+      const del = document.createElement('button');
+      del.className = 'luggage-delete';
+      del.textContent = '✕';
+      del.addEventListener('click', () => {
+        trip.luggage.splice(idx, 1);
+        renderLuggage(trip, container, labelEl);
+      });
+
+      row.appendChild(checkbox);
+      row.appendChild(text);
+      row.appendChild(del);
+      container.appendChild(row);
+    });
+
+    // Actualizar label
+    const total = trip.luggage.length;
+    const done = trip.luggage.filter(l => l.done).length;
+    labelEl.textContent = `Maleta (${done}/${total})`;
+  }
+
+  function makeField(label, type, value, onChange, placeholder = '') {
+    const row = document.createElement('div');
+    row.className = 'trip-field-row';
+    const lbl = document.createElement('label');
+    lbl.className = 'trip-field-label';
+    lbl.textContent = label;
+    row.appendChild(lbl);
+    const input = document.createElement('input');
+    input.type = type;
+    input.value = value || '';
+    input.placeholder = placeholder;
+    input.addEventListener('input', (e) => onChange(e.target.value));
+    row.appendChild(input);
+    return row;
+  }
+
+  function makeStatusField(label, options, currentValue, onChange) {
+    const row = document.createElement('div');
+    row.className = 'trip-field-row';
+    const lbl = document.createElement('label');
+    lbl.className = 'trip-field-label';
+    lbl.textContent = label;
+    row.appendChild(lbl);
+
+    const optionsContainer = document.createElement('div');
+    optionsContainer.className = 'trip-status-options';
+
+    options.forEach(opt => {
+      const o = document.createElement('div');
+      o.className = 'trip-status-option';
+      if (opt.value === currentValue) o.classList.add('selected');
+      o.textContent = opt.label;
+      o.addEventListener('click', () => {
+        optionsContainer.querySelectorAll('.trip-status-option').forEach(x => x.classList.remove('selected'));
+        o.classList.add('selected');
+        onChange(opt.value);
+      });
+      optionsContainer.appendChild(o);
+    });
+    row.appendChild(optionsContainer);
+    return row;
+  }
+
+  function formatDateLong(dateStr) {
+    if (!dateStr) return '';
+    const d = new Date(dateStr + 'T00:00:00');
+    return `${d.getDate()} ${MONTH_NAMES[d.getMonth()].toLowerCase()} ${d.getFullYear()}`;
+  }
+
+  function renderCustomTrackers(data) {
+    const container = document.getElementById('customTrackersList');
+    container.innerHTML = '';
+    customTrackers.forEach((tracker, idx) => {
+      const row = document.createElement('div');
+      row.className = 'checkbox-row';
+      const isChecked = data.customChecks[tracker] || false;
+      if (isChecked) row.classList.add('checked');
+
+      const checkbox = document.createElement('div');
+      checkbox.className = 'custom-checkbox';
+      if (isChecked) checkbox.classList.add('checked');
+
+      const label = document.createElement('span');
+      label.textContent = tracker;
+      label.style.flexGrow = '1';
+
+      const deleteBtn = document.createElement('button');
+      deleteBtn.className = 'delete-tracker';
+      deleteBtn.textContent = '×';
+      deleteBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (confirm(`¿Eliminar el tracker "${tracker}"?`)) {
+          customTrackers.splice(idx, 1);
+          renderCustomTrackers(data);
+        }
+      });
+
+      row.addEventListener('click', () => {
+        data.customChecks[tracker] = !data.customChecks[tracker];
+        renderCustomTrackers(data);
+      });
+
+      row.appendChild(checkbox);
+      row.appendChild(label);
+      row.appendChild(deleteBtn);
+      container.appendChild(row);
+    });
+  }
+
+  // BIENVENIDA
+  function showWelcome() {
+    document.getElementById('welcomeOverlay').classList.add('active');
+  }
+
+  let welcomeSelections = { gender: '', menstruation: false, palette: 'rosa-lila-verde' };
+
+  document.querySelectorAll('#genderOptions .gender-option').forEach(opt => {
+    opt.addEventListener('click', () => {
+      document.querySelectorAll('#genderOptions .gender-option').forEach(o => o.classList.remove('selected'));
+      opt.classList.add('selected');
+      welcomeSelections.gender = opt.dataset.gender;
+      // Si elige mujer, sugerimos activar menstruación automáticamente
+      if (opt.dataset.gender === 'mujer' && !welcomeSelections.menstruation) {
+        document.getElementById('welcomeMenstruation').classList.add('on');
+        welcomeSelections.menstruation = true;
+      }
+    });
+  });
+
+  document.getElementById('welcomeMenstruation').addEventListener('click', function() {
+    this.classList.toggle('on');
+    welcomeSelections.menstruation = this.classList.contains('on');
+  });
+
+  document.querySelectorAll('#paletteOptions .palette-option').forEach(opt => {
+    opt.addEventListener('click', () => {
+      document.querySelectorAll('#paletteOptions .palette-option').forEach(o => o.classList.remove('selected'));
+      opt.classList.add('selected');
+      welcomeSelections.palette = opt.dataset.palette;
+      document.documentElement.setAttribute('data-palette', opt.dataset.palette);
+    });
+  });
+
+  document.getElementById('welcomeSaveBtn').addEventListener('click', async () => {
+    const name = document.getElementById('welcomeName').value.trim();
+    if (!welcomeSelections.gender) {
+      alert('Elige un género antes de continuar :)');
+      return;
+    }
+    settings.name = name;
+    settings.gender = welcomeSelections.gender;
+    settings.trackMenstruation = welcomeSelections.menstruation;
+    settings.palette = welcomeSelections.palette;
+    settings.onboarded = true;
+    await saveData();
+    document.getElementById('welcomeOverlay').classList.remove('active');
+    applyPalette();
+    updateHeader();
+    updateLegend();
+    render();
+  });
+
+  // CONFIG
+  // VIAJES LISTENERS
+  document.getElementById('tripsBtn').addEventListener('click', openTripsModal);
+  document.getElementById('tripsCloseBtn').addEventListener('click', async () => {
+    await saveData();
+    document.getElementById('tripsOverlay').classList.remove('active');
+    render();
+    updateUpcomingTripBanner();
+  });
+  document.getElementById('tripsOverlay').addEventListener('click', async (e) => {
+    if (e.target.id === 'tripsOverlay') {
+      await saveData();
+      document.getElementById('tripsOverlay').classList.remove('active');
+      render();
+      updateUpcomingTripBanner();
+    }
+  });
+  document.getElementById('newTripBtn').addEventListener('click', () => {
+    // Cerrar otros que estuvieran abiertos
+    trips.forEach(t => t.expanded = false);
+    const newTrip = createNewTrip();
+    renderTripsList();
+    // Hacer scroll al nuevo
+    setTimeout(() => {
+      const cards = document.querySelectorAll('.trip-card');
+      if (cards.length > 0) cards[cards.length - 1].scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 100);
+  });
+
+  document.getElementById('configBtn').addEventListener('click', () => {
+    document.getElementById('configName').value = settings.name;
+    document.querySelectorAll('#configGenderOptions .gender-option').forEach(opt => {
+      opt.classList.toggle('selected', opt.dataset.gender === settings.gender);
+    });
+    document.getElementById('configWater').classList.toggle('on', settings.trackWater);
+    document.getElementById('configExercise').classList.toggle('on', settings.trackExercise);
+    document.getElementById('configMenstruation').classList.toggle('on', settings.trackMenstruation);
+    document.querySelectorAll('#configPaletteOptions .palette-option').forEach(opt => {
+      opt.classList.toggle('selected', opt.dataset.palette === settings.palette);
+    });
+    document.getElementById('configOverlay').classList.add('active');
+  });
+
+  document.querySelectorAll('#configGenderOptions .gender-option').forEach(opt => {
+    opt.addEventListener('click', () => {
+      document.querySelectorAll('#configGenderOptions .gender-option').forEach(o => o.classList.remove('selected'));
+      opt.classList.add('selected');
+    });
+  });
+
+  document.getElementById('configWater').addEventListener('click', function() {
+    this.classList.toggle('on');
+  });
+  document.getElementById('configExercise').addEventListener('click', function() {
+    this.classList.toggle('on');
+  });
+  document.getElementById('configMenstruation').addEventListener('click', function() {
+    this.classList.toggle('on');
+  });
+
+  document.querySelectorAll('#configPaletteOptions .palette-option').forEach(opt => {
+    opt.addEventListener('click', () => {
+      document.querySelectorAll('#configPaletteOptions .palette-option').forEach(o => o.classList.remove('selected'));
+      opt.classList.add('selected');
+      document.documentElement.setAttribute('data-palette', opt.dataset.palette);
+    });
+  });
+
+  document.getElementById('configCloseBtn').addEventListener('click', () => {
+    document.documentElement.setAttribute('data-palette', settings.palette); // revierte si no guarda
+    document.getElementById('configOverlay').classList.remove('active');
+  });
+
+  document.getElementById('configSaveBtn').addEventListener('click', async () => {
+    settings.name = document.getElementById('configName').value.trim();
+    const selectedGender = document.querySelector('#configGenderOptions .gender-option.selected');
+    if (selectedGender) settings.gender = selectedGender.dataset.gender;
+    settings.trackWater = document.getElementById('configWater').classList.contains('on');
+    settings.trackExercise = document.getElementById('configExercise').classList.contains('on');
+    settings.trackMenstruation = document.getElementById('configMenstruation').classList.contains('on');
+    const selectedPalette = document.querySelector('#configPaletteOptions .palette-option.selected');
+    if (selectedPalette) settings.palette = selectedPalette.dataset.palette;
+    await saveData();
+    applyPalette();
+    updateHeader();
+    updateLegend();
+    document.getElementById('configOverlay').classList.remove('active');
+    render();
+  });
+
+  // EVENTOS GENERALES
+  document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      viewMode = tab.dataset.view;
+      document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+      document.getElementById(viewMode + 'View').classList.add('active');
+      render();
+    });
+  });
+
+  document.getElementById('prevBtn').addEventListener('click', () => {
+    if (viewMode === 'month') currentDate.setMonth(currentDate.getMonth() - 1);
+    else currentDate.setDate(currentDate.getDate() - 7);
+    render();
+  });
+
+  document.getElementById('nextBtn').addEventListener('click', () => {
+    if (viewMode === 'month') currentDate.setMonth(currentDate.getMonth() + 1);
+    else currentDate.setDate(currentDate.getDate() + 7);
+    render();
+  });
+
+  document.getElementById('closeBtn').addEventListener('click', () => {
+    document.getElementById('modalOverlay').classList.remove('active');
+  });
+
+  document.getElementById('modalOverlay').addEventListener('click', (e) => {
+    if (e.target.id === 'modalOverlay') {
+      document.getElementById('modalOverlay').classList.remove('active');
+    }
+  });
+
+  document.getElementById('exerciseRow').addEventListener('click', () => {
+    const data = getDayData(selectedDate);
+    data.exercise = !data.exercise;
+    document.getElementById('exerciseCheck').classList.toggle('checked', data.exercise);
+    document.getElementById('exerciseDetails').style.display = data.exercise ? 'flex' : 'none';
+  });
+
+  document.querySelectorAll('.exercise-tag').forEach(tag => {
+    tag.addEventListener('click', () => {
+      const data = getDayData(selectedDate);
+      const type = tag.dataset.type;
+      const idx = data.exerciseTypes.indexOf(type);
+      if (idx === -1) data.exerciseTypes.push(type);
+      else data.exerciseTypes.splice(idx, 1);
+      tag.classList.toggle('selected');
+    });
+  });
+
+  document.getElementById('exerciseNote').addEventListener('input', (e) => {
+    getDayData(selectedDate).exerciseNote = e.target.value;
+  });
+
+  document.getElementById('diaryText').addEventListener('input', (e) => {
+    getDayData(selectedDate).diary = e.target.value;
+  });
+
+  document.getElementById('menstruationToggle').addEventListener('click', () => {
+    const data = getDayData(selectedDate);
+    data.menstruation = !data.menstruation;
+    document.getElementById('menstruationCheck').classList.toggle('checked', data.menstruation);
+    document.getElementById('menstruationToggle').classList.toggle('active', data.menstruation);
+    updateCycleStats();
+  });
+
+  // EVENT LISTENERS TAREAS
+  document.getElementById('addTaskBtn').addEventListener('click', () => {
+    const input = document.getElementById('taskInput');
+    addTask(input.value);
+    input.value = '';
+    input.focus();
+  });
+
+  document.getElementById('taskInput').addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+      const input = e.target;
+      addTask(input.value);
+      input.value = '';
+    }
+  });
+
+  document.getElementById('addTrackerBtn').addEventListener('click', () => {
+    const name = prompt('¿Qué quieres trackear? (ej: "Escribir", "Meditar", "Leer")');
+    // Nota: los ejemplos los mantengo en pasado simple porque suenan naturales en todos los español
+    if (name && name.trim()) {
+      customTrackers.push(name.trim());
+      renderCustomTrackers(getDayData(selectedDate));
+    }
+  });
+
+  document.getElementById('saveBtn').addEventListener('click', async () => {
+    await saveData();
+    document.getElementById('modalOverlay').classList.remove('active');
+    render();
+    const btn = document.getElementById('saveBtn');
+    const original = btn.textContent;
+    btn.textContent = '✓ Guardado';
+    setTimeout(() => { btn.textContent = original; }, 1500);
+  });
+
+  function render() {
+    if (viewMode === 'month') renderMonthView();
+    else renderWeekView();
+  }
+
+  // INICIO
+  (async () => {
+    await loadData();
+    applyPalette();
+    updateHeader();
+    updateLegend();
+    updateUpcomingTripBanner();
+    if (!settings.onboarded) {
+      showWelcome();
+    }
+    render();
+  })();
+
+  // Service Worker (para funcionar offline como PWA)
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('sw.js')
+        .then((reg) => console.log('Service Worker registrado:', reg.scope))
+        .catch((err) => console.log('Service Worker no se pudo registrar:', err));
+    });
+  }
+</script>
+</body>
+</html>
