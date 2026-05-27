@@ -1592,7 +1592,9 @@
     .day-cell {
       padding: 4px;
       border-radius: 10px;
-      min-height: 50px;
+      aspect-ratio: auto;
+      min-height: 48px;
+      height: auto;
     }
 
     .day-number {
@@ -1883,7 +1885,8 @@
   /* MÓVIL MUY PEQUEÑO */
   @media (max-width: 380px) {
     .day-cell {
-      min-height: 42px;
+      aspect-ratio: auto;
+      min-height: 44px;
       padding: 3px;
     }
 
@@ -1911,7 +1914,8 @@
   /* TOUCH DEVICES: agrandar área de tap */
   @media (hover: none) and (pointer: coarse) {
     .day-cell {
-      min-height: 56px;
+      aspect-ratio: auto;
+      min-height: 52px;
     }
 
     button, .checkbox-row, .task-item, .luggage-item,
