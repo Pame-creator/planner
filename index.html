@@ -667,6 +667,9 @@
     cursor: pointer;
     transition: all 0.2s ease;
     color: var(--texto);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .exercise-tag.selected {
@@ -1046,6 +1049,9 @@
     text-align: center;
     transition: all 0.2s ease;
     color: var(--texto);
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .trip-status-option.selected {
@@ -1385,6 +1391,9 @@
     font-size: 13px;
     transition: all 0.2s ease;
     color: var(--texto);
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .gender-option:hover {
@@ -2140,6 +2149,16 @@
       </div>
     </div>
 
+    <div class="modal-section">
+      <div class="section-title">Respaldo de mis datos</div>
+      <div style="font-size: 12px; color: var(--texto-suave); margin-bottom: 10px; line-height: 1.5;">
+        Descarga tus datos como archivo de respaldo. Útil si cambias de dispositivo o quieres guardar una copia.
+      </div>
+      <button class="add-tracker-btn" id="exportBtn" style="margin-top: 0; margin-bottom: 8px;">⬇ Descargar respaldo</button>
+      <button class="add-tracker-btn" id="importBtn" style="margin-top: 0;">⬆ Restaurar desde respaldo</button>
+      <input type="file" id="importFileInput" accept=".json,application/json" style="display:none;">
+    </div>
+
     <button class="save-btn" id="configSaveBtn">Guardar cambios</button>
   </div>
 </div>
@@ -2303,6 +2322,64 @@
         console.error('Error guardando en localStorage:', e);
       }
     }
+  }
+
+  // EXPORTAR DATOS A ARCHIVO
+  function exportData() {
+    const backup = {
+      version: 2,
+      exportDate: new Date().toISOString(),
+      dayData,
+      customTrackers,
+      trips,
+      settings
+    };
+    const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const today = new Date();
+    const dateStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+    const filename = `mi-planner-respaldo-${dateStr}.json`;
+
+    // Crear link y simular click
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
+  // IMPORTAR DATOS DESDE ARCHIVO
+  async function importData(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = async (e) => {
+        try {
+          const parsed = JSON.parse(e.target.result);
+
+          // Validación básica: que tenga al menos uno de los campos esperados
+          if (!parsed.dayData && !parsed.trips && !parsed.settings) {
+            reject(new Error('El archivo no parece ser un respaldo válido del planner.'));
+            return;
+          }
+
+          // Aplicar los datos
+          if (parsed.dayData) dayData = parsed.dayData;
+          if (parsed.customTrackers) customTrackers = parsed.customTrackers;
+          if (parsed.trips) trips = parsed.trips;
+          if (parsed.settings) settings = { ...settings, ...parsed.settings };
+
+          // Guardar
+          await saveData();
+          resolve(parsed);
+        } catch (err) {
+          reject(new Error('No se pudo leer el archivo. ¿Es un archivo JSON válido del planner?'));
+        }
+      };
+      reader.onerror = () => reject(new Error('Error al leer el archivo.'));
+      reader.readAsText(file);
+    });
   }
 
   function dateKey(date) {
@@ -3473,6 +3550,46 @@
   });
   document.getElementById('configMenstruation').addEventListener('click', function() {
     this.classList.toggle('on');
+  });
+
+  // EXPORT / IMPORT
+  document.getElementById('exportBtn').addEventListener('click', async () => {
+    await saveData();
+    exportData();
+    const btn = document.getElementById('exportBtn');
+    const original = btn.textContent;
+    btn.textContent = '✓ Respaldo descargado';
+    setTimeout(() => { btn.textContent = original; }, 2000);
+  });
+
+  document.getElementById('importBtn').addEventListener('click', () => {
+    document.getElementById('importFileInput').click();
+  });
+
+  document.getElementById('importFileInput').addEventListener('change', async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const confirmar = confirm(
+      '¿Restaurar desde este respaldo?\n\n' +
+      'Esto reemplazará TODOS tus datos actuales (días, tareas, viajes, configuración) ' +
+      'con los del archivo.\n\n' +
+      'Si tienes datos importantes ahora, primero descarga un respaldo de seguridad.'
+    );
+
+    if (!confirmar) {
+      e.target.value = '';
+      return;
+    }
+
+    try {
+      await importData(file);
+      alert('✓ Datos restaurados correctamente.\n\nLa app se va a recargar para aplicar los cambios.');
+      location.reload();
+    } catch (err) {
+      alert('No se pudo restaurar: ' + err.message);
+    }
+    e.target.value = '';
   });
 
   document.querySelectorAll('#configPaletteOptions .palette-option').forEach(opt => {
